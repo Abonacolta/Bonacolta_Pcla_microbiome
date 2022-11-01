@@ -1,0 +1,284 @@
+sample	treament1	idlab	rack	colony	time	treatment	color	population	region	temps	depth (m)	depth (range)	lat	lon	N14	N21	resistance_14	resistance_21	resitance_14_21	relative_resistance	type
+pop1-6	1.8.1	1.2.1	1.2	1	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop1-1	1.8.3	1.2.3	1.2	3	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop1-7	1.8.9	1.2.9	1.2	9	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop1-8	1.9.1	1.3.1	1.3	1	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop1-9	1.9.2	1.3.2	1.3	2	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop1-2	1.9.3	1.3.3	1.3	3	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	5	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop1-3	1.9.4	1.3.4	1.3	4	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop1-10	1.9.6	1.3.6	1.3	6	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop1-4	1.9.8	1.3.8	1.3	8	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop1-5	1.9.10	1.3.10	1.3	10	T-1	O	pred	La Vaca	Medes 	21.95	17_20	16_20	42.048047	3.226322	5	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop2-1	2.7.1	2.1.1	2.1	1	T-1	O	pred	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	0	30	Resistant	Normal	Resistant	Resistant	coral
+2-1-5-T-minus-1	2.7.5	2.1.5	2.1	5	T-1	O	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop2-6	2.7.5	2.1.5	2.1	5	T-1	O	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-5-T0-T	2.7.5	2.1.5	2.1	5	T0	T	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-5-T1-T	2.7.5	2.1.5	2.1	5	T1	T	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-5-T2-T	2.7.5	2.1.5	2.1	5	T2	T	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-5-T3-T	2.7.5	2.1.5	2.1	5	T3	T	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-6-T-minus-1	na	2.1.6	2.1	6	T-1	O	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-6-T0-T	na	2.1.6	2.1	6	T0	T	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-6-T1-T	na	2.1.6	2.1	6	T1	T	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-6-T2-T	na	2.1.6	2.1	6	T2	T	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-6-T3-T	na	2.1.6	2.1	6	T3	T	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-8-T-minus-1	na	2.1.8	2.1	8	T-1	O	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	40	100	Normal	Sensible	Tolerant	Normal	coral
+2-1-8-T0-T	na	2.1.8	2.1	8	T0	T	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	40	100	Normal	Sensible	Tolerant	Normal	coral
+2-1-8-T1-T	na	2.1.8	2.1	8	T1	T	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	40	100	Normal	Sensible	Tolerant	Normal	coral
+2-1-8-T2-T	na	2.1.8	2.1	8	T2	T	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	40	100	Normal	Sensible	Tolerant	Normal	coral
+2-1-8-T3-T	na	2.1.8	2.1	8	T3	T	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	40	100	Normal	Sensible	Tolerant	Normal	coral
+2-1-10-T-minus-1	2.7.10	2.1.10	2.1	10	T-1	O	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop2-8	2.7.10	2.1.10	2.1	10	T-1	O	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-10-T0-T	2.7.10	2.1.10	2.1	10	T0	T	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-10-T1-T	2.7.10	2.1.10	2.1	10	T1	T	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-10-T2-T	2.7.10	2.1.10	2.1	10	T2	T	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-1-10-T3-T	2.7.10	2.1.10	2.1	10	T3	T	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+2-2-2-T0-C	na	2.2.2	2.2	2	T0	C	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	50	100	Normal	Sensible	Tolerant	Normal	coral
+2-2-2-T1-C	na	2.2.2	2.2	2	T1	C	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	50	100	Normal	Sensible	Tolerant	Normal	coral
+2-2-2-T2-C	na	2.2.2	2.2	2	T2	C	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	50	100	Normal	Sensible	Tolerant	Normal	coral
+2-2-2-T3-C	na	2.2.2	2.2	2	T3	C	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	50	100	Normal	Sensible	Tolerant	Normal	coral
+2-2-2-T-minus-1	na	2.2.2	2.2	2	T-1	O	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	50	100	Normal	Sensible	Tolerant	Normal	coral
+pop2-2	2.8.3	2.2.3	2.2	3	T-1	O	pred	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	0	20	Resistant	NormalR	Resistant	Resistant	coral
+2-2-4-T0-C	2.8.4	2.2.4	2.2	4	T0	C	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	60	100	Normal	Sensible	Sensible	Sensible	coral
+2-2-4-T1-C	2.8.4	2.2.4	2.2	4	T1	C	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	60	100	Normal	Sensible	Sensible	Sensible	coral
+2-2-4-T2-C	2.8.4	2.2.4	2.2	4	T2	C	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	60	100	Normal	Sensible	Sensible	Sensible	coral
+2-2-4-T3-C	2.8.4	2.2.4	2.2	4	T3	C	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	60	100	Normal	Sensible	Sensible	Sensible	coral
+2-2-4-T-minus-1	2.8.4	2.2.4	2.2	4	T-1	O	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	60	100	Normal	Sensible	Sensible	Sensible	coral
+pop2-9	2.8.4	2.2.4	2.2	4	T-1	O	red	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	60	100	Normal	Sensible	Sensible	Sensible	coral
+pop2-3	2.8.5	2.2.5	2.2	5	T-1	O	pred	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	5	90	NormalR	NormalS	Tolerant	Resistant	coral
+pop2-7	2.8.6	2.2.6	2.2	6	T-1	O	pred	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	100	100	Sensible	Sensible	Hypersensible	Normal	coral
+2-2-9-T0-C	na	2.2.9	2.2	9	T0	C	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	30	100	Normal	Sensible	Tolerant	Normal	coral
+2-2-9-T1-C	na	2.2.9	2.2	9	T1	C	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	30	100	Normal	Sensible	Tolerant	Normal	coral
+2-2-9-T2-C	na	2.2.9	2.2	9	T2	C	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	30	100	Normal	Sensible	Tolerant	Normal	coral
+2-2-9-T3-C	na	2.2.9	2.2	9	T3	C	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	30	100	Normal	Sensible	Tolerant	Normal	coral
+2-2-9-T-minus-1	na	2.2.9	2.2	9	T-1	O	yellow	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	30	100	Normal	Sensible	Tolerant	Normal	coral
+pop2-4	2.9.3	2.3.3	2.3	3	T-1	O	pred	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	5	100	NormalR	Resitant	Tolerant	Resistant	coral
+pop2-10	2.9.6	2.3.6	2.3	6	T-1	O	pred	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	90	100	NormalS	Sensible	Sensible	Sensible	coral
+pop2-5	2.9.10	2.3.10	2.3	10	T-1	O	pred	Pota de Llop	Medes 	21.95	14_15	10_15	42.0497	3.2254	0	70	Resistant	NormalS	Tolerant	Resistant	coral
+3-1-1-T2-C	na	3.1.1	3.1	1	T2	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	30	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-1-T-minus-1	na	3.1.1	3.1	1	T-1	O	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	30	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-1-T0-T	na	3.1.1	3.1	1	T0	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	30	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-1-T1-T	na	3.1.1	3.1	1	T1	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	30	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-1-T3-T	na	3.1.1	3.1	1	T3	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	30	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-2-T2-C	na	3.1.2	3.1	2	T2	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	40	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-2-T-minus-1	na	3.1.2	3.1	2	T-1	O	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	40	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-2-T0-T	na	3.1.2	3.1	2	T0	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	40	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-2-T1-T	na	3.1.2	3.1	2	T1	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	40	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-2-T3-T	na	3.1.2	3.1	2	T3	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	40	100	Normal	Sensible	Tolerant	Normal	coral
+3-1-3-T-minus-1	na	3.1.3	3.1	3	T-1	O	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	25	100	NormalR	Sensible	Tolerant	Normal	coral
+3-1-3-T0-T	na	3.1.3	3.1	3	T0	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	25	100	NormalR	Sensible	Tolerant	Normal	coral
+3-1-3-T1-T	na	3.1.3	3.1	3	T1	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	25	100	NormalR	Sensible	Tolerant	Normal	coral
+3-1-3-T2-T	na	3.1.3	3.1	3	T2	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	25	100	NormalR	Sensible	Tolerant	Normal	coral
+3-1-3-T3-T	na	3.1.3	3.1	3	T3	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	25	100	NormalR	Sensible	Tolerant	Normal	coral
+3-1-6-T-minus-1	na	3.1.6	3.1	6	T-1	O	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	20	100	NormalR	Sensible	Tolerant	Normal	coral
+3-1-6-T0-T	na	3.1.6	3.1	6	T0	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	20	100	NormalR	Sensible	Tolerant	Normal	coral
+3-1-6-T1-T	na	3.1.6	3.1	6	T1	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	20	100	NormalR	Sensible	Tolerant	Normal	coral
+3-1-6-T2-T	na	3.1.6	3.1	6	T2	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	20	100	NormalR	Sensible	Tolerant	Normal	coral
+3-1-6-T3-T	na	3.1.6	3.1	6	T3	T	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	20	100	NormalR	Sensible	Tolerant	Normal	coral
+pop3-1	3.7.10	3.1.10	3.1	10	T-1	O	pred	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	0	90	Resistant	NormalS	Tolerant	Resistant	coral
+pop3-2	3.8.2	3.2.2	3.2	2	T-1	O	pred	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	20	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop3-6	3.8.3	3.2.3	3.2	3	T-1	O	pred	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop3-7	3.8.5	3.2.5	3.2	5	T-1	O	pred	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop3-8	3.8.9	3.2.9	3.2	9	T-1	O	pred	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop3-9	3.8.10	3.2.10	3.2	10	T-1	O	pred	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+3-3-1-T0-C	na	3.3.1	3.3	1	T0	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+3-3-1-T1-C	na	3.3.1	3.3	1	T1	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+3-3-1-T2-C	na	3.3.1	3.3	1	T2	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+3-3-1-T3-C	na	3.3.1	3.3	1	T3	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+3-3-1-T-minus-1	na	3.3.1	3.3	1	T-1	O	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop3-3	3.9.1	3.3.1	3.3	1	T-1	O	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+3-3-3-T0-C	na	3.3.3	3.3	3	T0	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	50	100	Normal	Sensible	Tolerant	Normal	coral
+3-3-3-T1-C	na	3.3.3	3.3	3	T1	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	50	100	Normal	Sensible	Tolerant	Normal	coral
+3-3-3-T2-C	na	3.3.3	3.3	3	T2	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	50	100	Normal	Sensible	Tolerant	Normal	coral
+3-3-3-T3-C	na	3.3.3	3.3	3	T3	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	50	100	Normal	Sensible	Tolerant	Normal	coral
+3-3-3-T-minus-1	na	3.3.3	3.3	3	T-1	O	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	50	100	Normal	Sensible	Tolerant	Normal	coral
+3-3-4-T0-C	na	3.3.4	3.3	4	T0	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	35	100	Normal	Sensible	Tolerant	Normal	coral
+3-3-4-T1-C	na	3.3.4	3.3	4	T1	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	35	100	Normal	Sensible	Tolerant	Normal	coral
+3-3-4-T2-C	na	3.3.4	3.3	4	T2	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	35	100	Normal	Sensible	Tolerant	Normal	coral
+3-3-4-T3-C	na	3.3.4	3.3	4	T3	C	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	35	100	Normal	Sensible	Tolerant	Normal	coral
+3-3-4-T-minus-1	na	3.3.4	3.3	4	T-1	O	red	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	35	100	Normal	Sensible	Tolerant	Normal	coral
+pop3-4	3.9.6	3.3.6	3.3	6	T-1	O	pred	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop3-10	3.9.8	3.3.8	3.3	8	T-1	O	pred	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop3-5	3.9.9	3.3.9	3.3	9	T-1	O	pred	Tascons	Medes 	21.95	15_17	16_20	42.042189	3.2269	10	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop4-6	4.7.1	4.1.1	4.1	1	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop4-1	4.7.2	4.1.2	4.1	2	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop4-2	4.7.10	4.1.10	4.1	10	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	20	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop4-7	4.9.1	4.2.1	4.2	1	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	100	100	Sensible	Sensible	Hypersensible	Normal	coral
+pop4-3	4.9.3	4.2.3	4.2	3	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	20	100	NormalR	Sensible	Tolerant	Normal	coral
+pop4-8	4.9.7	4.2.7	4.2	7	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	100	100	Sensible	Sensible	Hypersensible	Normal	coral
+pop4-9	4.9.8	4.2.8	4.2	8	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	100	100	Sensible	Sensible	Hypersensible	Normal	coral
+pop4-4	4.10.2	4.3.2	4.3	2	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	0	100	Resistant	Sensible	Tolerant	na	coral
+pop4-5	4.10.4	4.3.4	4.3	4	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	20	100	NormalR	Sensible	Tolerant	na	coral
+pop4-10	4.10.10	4.3.10	4.3	10	T-1	O	pred	Palazzu	Scandola	21.82	24_25	21_25	42.379873	8.546163	100	100	Sensible	Sensible	Hypersensible	na	coral
+pop5-6	5.7.3	5.1.3	5.1	3	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop5-1	5.7.6	5.1.6	5.1	6	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	10	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop5-2	5.7.8	5.1.8	5.1	8	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop5-7	5.9.1	5.2.1	5.2	1	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	60	100	Normal	Sensible	Sensible	Sensible	coral
+pop5-3	5.9.4	5.2.4	5.2	4	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop5-8	5.9.10	5.2.10	5.2	10	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	80	100	NormalS	Sensible	Sensible	Sensible	coral
+pop5-9	5.10.1	5.3.1	5.3	1	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	80	100	NormalS	Sensible	Sensible	na	coral
+pop5-4	5.10.4	5.3.4	5.3	4	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	5	100	NormalR	Sensible	Tolerant	na	coral
+pop5-5	5.10.8	5.3.8	5.3	8	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	0	100	Resistant	Sensible	Tolerant	na	coral
+pop5-10	5.10.10	5.3.10	5.3	10	T-1	O	pred	Palazzinu	Scandola	21.82	25_27	26_30	42.379854	8.549999	90	100	NormalS	Sensible	Sensible	na	coral
+pop6-1	6.7.2	6.1.2	6.1	2	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	10	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop6-6	6.7.3	6.1.3	6.1	3	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop6-2	6.7.4	6.1.4	6.1	4	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	40	100	Normal	Sensible	Tolerant	Resistant	coral
+pop6-3	6.7.7	6.1.7	6.1	7	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	5	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop6-4	6.7.9	6.1.9	6.1	9	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	15	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop6-7	6.9.2	6.2.2	6.2	2	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	100	100	Sensible	Sensible	Hypersensible	Normal	coral
+pop6-8	6.9.5	6.2.5	6.2	5	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	100	100	Sensible	Sensible	Hypersensible	Normal	coral
+pop6-9	6.9.1	6.3.1	6.3	1	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop6-5	6.10.8	6.3.8	6.3	3	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	30	100	Normal	Sensible	Tolerant	na	coral
+pop6-10	6.9.10	6.3.10	6.3	10	T-1	O	pred	Gargallu	Scandola	21.82	25_26	26_30	42.371839	8.534394	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop7-1	7.10.2	7.4.2	7.4	2	T-1	O	pred	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	50	Resistant	Normal	Resistant	Resistant	coral
+7-4-4-T-minus-1	na	7.4.4	7.4	4	T-1	O	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+7-4-4-T0-T	na	7.4.4	7.4	4	T0	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+7-4-4-T1-T	na	7.4.4	7.4	4	T1	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+7-4-4-T2-T	na	7.4.4	7.4	4	T2	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+7-4-4-T3-T	na	7.4.4	7.4	4	T3	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+7-4-5-T-minus-1	na	7.4.5	7.4	5	T-1	O	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	15	100	NormalR	Sensible	Tolerant	Normal	coral
+7-4-5-T0-T	na	7.4.5	7.4	5	T0	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	15	100	NormalR	Sensible	Tolerant	Normal	coral
+7-4-5-T1-T	na	7.4.5	7.4	5	T1	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	15	100	NormalR	Sensible	Tolerant	Normal	coral
+7-4-5-T2-T	na	7.4.5	7.4	5	T2	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	15	100	NormalR	Sensible	Tolerant	Normal	coral
+7-4-5-T3-T	na	7.4.5	7.4	5	T3	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	15	100	NormalR	Sensible	Tolerant	Normal	coral
+pop7-2	7.10.6	7.4.6	7.4	6	T-1	O	pred	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	80	Resistant	NormalS	Tolerant	Resistant	coral
+7-4-8-T-minus-1	na	7.4.8	7.4	8	T-1	O	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	80	Resistant	NormalS	Tolerant	Normal	coral
+7-4-8-T0-T	na	7.4.8	7.4	8	T0	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	80	Resistant	NormalS	Tolerant	Normal	coral
+7-4-8-T1-T	na	7.4.8	7.4	8	T1	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	80	Resistant	NormalS	Tolerant	Normal	coral
+7-4-8-T2-T	na	7.4.8	7.4	8	T2	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	80	Resistant	NormalS	Tolerant	Normal	coral
+7-4-8-T3-T	na	7.4.8	7.4	8	T3	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	80	Resistant	NormalS	Tolerant	Normal	coral
+7-4-9-T0-T	na	7.4.9	7.4	9	T0	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	20	100	NormalR	Sensible	Tolerant	Normal	coral
+7-4-9-T1-T	na	7.4.9	7.4	9	T1	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	20	100	NormalR	Sensible	Tolerant	Normal	coral
+7-4-9-T2-T	na	7.4.9	7.4	9	T2	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	20	100	NormalR	Sensible	Tolerant	Normal	coral
+7-4-9-T3-T	na	7.4.9	7.4	9	T3	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	20	100	NormalR	Sensible	Tolerant	Normal	coral
+7-4-10-T-minus-1	na	7.4.10	7.4	10	T-1	O	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+7-4-10-T0-T	na	7.4.10	7.4	10	T0	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+7-4-10-T1-T	na	7.4.10	7.4	10	T1	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+7-4-10-T2-T	na	7.4.10	7.4	10	T2	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+7-4-10-T3-T	na	7.4.10	7.4	10	T3	T	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop7-6	7.10.10	7.4.10	7.4	10	T-1	O	pred	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop7-7	7.11.5	7.5.5	7.5	5	T-1	O	pred	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop7-3	7.11.7	7.5.7	7.5	7	T-1	O	pred	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	15	Resistant	NormalR	Resistant	Resistant	coral
+pop7-4	7.11.8	7.5.8	7.5	8	T-1	O	pred	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+7-6-1-T0-C	na	7.6.1	7.6	1	T0	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	20	100	NormalR	Sensible	Tolerant	Normal	coral
+7-6-1-T1-C	na	7.6.1	7.6	1	T1	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	20	100	NormalR	Sensible	Tolerant	Normal	coral
+7-6-1-T2-C	na	7.6.1	7.6	1	T2	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	20	100	NormalR	Sensible	Tolerant	Normal	coral
+7-6-1-T3-C	na	7.6.1	7.6	1	T3	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	20	100	NormalR	Sensible	Tolerant	Normal	coral
+7-6-1-T-minus-1	na	7.6.1	7.6	1	T-1	O	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	20	100	NormalR	Sensible	Tolerant	Normal	coral
+7-6-2-T0-C	na	7.6.2	7.6	2	T0	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+7-6-2-T1-C	na	7.6.2	7.6	2	T1	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+7-6-2-T2-C	na	7.6.2	7.6	2	T2	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+7-6-2-T3-C	na	7.6.2	7.6	2	T3	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+7-6-2-T-minus-1	na	7.6.2	7.6	2	T-1	O	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	30	100	Normal	Sensible	Tolerant	Normal	coral
+pop7-8	7.12.3	7.6.3	7.6	3	T-1	O	pred	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	90	100	NormalS	Sensible	Sensible	Sensible	coral
+pop7-9	7.12.4	7.6.4	7.6	4	T-1	O	pred	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	80	100	NormalS	Sensible	Sensible	Sensible	coral
+pop7-5	7.12.7	7.6.7	7.6	7	T-1	O	pred	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	0	90	Resistant	NormalS	Tolerant	Resistant	coral
+7-6-8-T0-C	na	7.6.8	7.6	8	T0	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	60	100	NormalS	Sensible	Sensible	Sensible	coral
+7-6-8-T1-C	na	7.6.8	7.6	8	T1	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	60	100	NormalS	Sensible	Sensible	Sensible	coral
+7-6-8-T2-C	na	7.6.8	7.6	8	T2	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	60	100	NormalS	Sensible	Sensible	Sensible	coral
+7-6-8-T3-C	na	7.6.8	7.6	8	T3	C	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	60	100	NormalS	Sensible	Sensible	Sensible	coral
+7-6-8-T-minus-1	na	7.6.8	7.6	8	T-1	O	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	60	100	NormalS	Sensible	Sensible	Sensible	coral
+pop7-10	7.12.8	7.6.8	7.6	8	T-1	O	red	Altare	Portofino	19.71	35_37	35_40	44.308918	9.178645	60	100	Normal	Sensible	Sensible	Sensible	coral
+8-4-1-T-minus-1	na	8.4.1	8.4	1	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-4-1-T0-T	na	8.4.1	8.4	1	T0	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-4-1-T1-T	na	8.4.1	8.4	1	T1	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-4-1-T2-T	na	8.4.1	8.4	1	T2	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-4-1-T3-T	na	8.4.1	8.4	1	T3	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+pop8-1	8.10.2	8.4.2	8.4	2	T-1	O	pred	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+8-4-4-T-minus-1	na	8.4.4	8.4	4	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-4-4-T0-T	na	8.4.4	8.4	4	T0	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-4-4-T1-T	na	8.4.4	8.4	4	T1	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-4-4-T2-T	na	8.4.4	8.4	4	T2	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-4-4-T3-T	na	8.4.4	8.4	4	T3	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+pop8-2	8.10.5	8.4.5	8.4	5	T-1	O	pred	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+8-4-6-T-minus-1	na	8.4.6	8.4	6	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	5	30	NormalR	Normal	Resistant	Normal	coral
+8-4-6-T0-T	na	8.4.6	8.4	6	T0	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	5	30	NormalR	Normal	Resistant	Normal	coral
+8-4-6-T1-T	na	8.4.6	8.4	6	T1	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	5	30	NormalR	Normal	Resistant	Normal	coral
+8-4-6-T2-T	na	8.4.6	8.4	6	T2	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	5	30	NormalR	Normal	Resistant	Normal	coral
+8-4-6-T3-T	na	8.4.6	8.4	6	T3	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	5	30	NormalR	Normal	Resistant	Normal	coral
+8-4-9-T-minus-1	na	8.4.9	8.4	9	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	20	Resistant	NormalR	Resistant	Normal	coral
+8-4-9-T0-T	na	8.4.9	8.4	9	T0	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	20	Resistant	NormalR	Resistant	Normal	coral
+8-4-9-T1-T	na	8.4.9	8.4	9	T1	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	20	Resistant	NormalR	Resistant	Normal	coral
+8-4-9-T2-T	na	8.4.9	8.4	9	T2	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	20	Resistant	NormalR	Resistant	Normal	coral
+8-4-9-T3-T	na	8.4.9	8.4	9	T3	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	20	Resistant	NormalR	Resistant	Normal	coral
+8-5-4-T0-C	na	8.5.4	8.5	4	T0	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	70	100	NormalS	Sensible	Sensible	Sensible	coral
+8-5-4-T-minus-1	na	8.5.4	8.5	4	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	70	100	NormalS	Sensible	Sensible	Sensible	coral
+pop8-6	8.11.4	8.5.4	8.5	4	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	70	100	NormalS	Sensible	Sensible	Sensible	coral
+8-5-5-T0-C	na	8.5.5	8.5	5	T0	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	95	Resistant	NormalS	Tolerant	Normal	coral
+8-5-5-T-minus-1	na	8.5.5	8.5	5	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	95	Resistant	NormalS	Tolerant	Normal	coral
+pop8-3	8.11.6	8.5.6	8.5	6	T-1	O	pred	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+pop8-4	8.11.7	8.5.7	8.5	7	T-1	O	pred	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+pop8-7	8.11.9	8.5.9	8.5	9	T-1	O	pred	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	15	100	NormalR	Sensible	Tolerant	Sensible	coral
+8-5-10-T0-C	na	8.5.10	8.5	10	T0	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	20	100	NormalR	Sensible	Tolerant	Sensible	coral
+8-5-10-T-minus-1	na	8.5.10	8.5	10	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	20	100	NormalR	Sensible	Tolerant	Sensible	coral
+pop8-8	8.11.10	8.5.10	8.5	10	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	20	100	NormalR	Sensible	Tolerant	Sensible	coral
+8-6-4-T1-C	na	8.6.4	8.6	4	T1	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-6-4-T2-C	na	8.6.4	8.6	4	T2	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-6-4-T3-C	na	8.6.4	8.6	4	T3	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	50	Resistant	Normal	Resistant	Normal	coral
+8-6-5-T1-C	na	8.6.5	8.6	5	T1	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	25	Resistant	NormalR	Resistant	Normal	coral
+8-6-5-T2-C	na	8.6.5	8.6	5	T2	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	25	Resistant	NormalR	Resistant	Normal	coral
+8-6-5-T3-C	na	8.6.5	8.6	5	T3	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	25	Resistant	NormalR	Resistant	Normal	coral
+pop8-9	8.12.6	8.6.6	8.6	6	T-1	O	pred	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	60	Resistant	NormalS	Tolerant	Sensible	coral
+pop8-10	8.12.8	8.6.8	8.6	8	T-1	O	pred	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	30	100	Normal	Sensible	Tolerant	Sensible	coral
+8-6-10-T1-C	na	8.6.10	8.6	10	T1	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+8-6-10-T3-C	na	8.6.10	8.6	10	T3	C	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+8-6-10-T2-T	na	8.6.10	8.6	10	T2	T	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+pop8-5	8.12.10	8.6.10	8.6	10	T-1	O	red	Lighthouse	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+pop9-1	9.10.1	9.4.1	9.4	1	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	80	Resistant	NormalS	Tolerant	Resistant	coral
+pop9-6	9.10.2	9.4.2	9.4	2	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	60	100	Normal	Sensible	Sensible	Sensible	coral
+pop9-2	9.10.7	9.4.7	9.4	7	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	15	Resistant	NormalR	Resistant	Resistant	coral
+pop9-3	9.10.10	9.4.10	9.4	10	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop9-7	9.11.1	9.5.1	9.5	1	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	90	100	NormalS	Sensible	Sensible	Sensible	coral
+pop9-8	9.11.4	9.5.4	9.5	4	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	80	100	NormalS	Sensible	Sensible	Sensible	coral
+pop9-4	9.12.3	9.6.3	9.6	3	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	10	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop9-9	9.12.4	9.6.4	9.6	4	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	60	100	NormalS	Sensible	Sensible	Sensible	coral
+pop9-5	9.12.6	9.6.6	9.6	6	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop9-10	9.12.7	9.6.7	9.6	7	T-1	O	pred	Indiano	Portofino	19.71	35_37	35_40	44.312476	9.166889	90	100	NormalS	Sensible	Sensible	Sensible	coral
+pop10-6	10.10.1	10.4.1	10.4	1	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop10-1	10.10.3	10.4.3	10.4	3	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	30	100	Normal	Sensible	Tolerant	Resistant	coral
+pop10-7	10.11.1	10.5.1	10.5	1	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop10-2	10.11.3	10.5.3	10.5	3	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	15	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop10-3	10.11.5	10.5.5	10.5	5	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	10	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop10-4	10.11.8	10.5.8	10.5	8	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	30	100	Normal	Sensible	Tolerant	Resistant	coral
+pop10-8	10.12.4	10.6.4	10.6	4	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop10-5	10.12.6	10.6.6	10.6	6	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop10-9	10.12.8	10.6.8	10.6	8	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop10-10	10.12.9	10.6.9	10.6	9	T-1	O	pred	Balun	Croatia	22.04	33_36	30_35	43.803889	15.255	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop11-1	11.10.3	11.4.3	11.4	3	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	10	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop11-6	11.10.5	11.4.5	11.4	5	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop11-7	11.10.7	11.4.7	11.4	7	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop11-2	11.10.9	11.4.9	11.4	9	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	0	100	Resistant	Sensible	Tolerant	Resistant	coral
+pop11-3	11.11.8	11.5.8	11.5	8	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	15	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop11-8	11.12.1	11.6.1	11.6	1	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop11-4	11.12.4	11.6.4	11.6	4	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	15	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop11-9	11.12.5	11.6.5	11.6	5	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop11-5	11.12.6	11.6.6	11.6	6	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	15	100	NormalR	Sensible	Tolerant	Resistant	coral
+pop11-10	11.12.8	11.6.8	11.6	8	T-1	O	pred	Mana	Croatia	22.04	35	30_35	43.800278	15.266389	100	100	Sensible	Sensible	Hypersensible	Sensible	coral
+pop12-2	12.10.4	12.4.4	12.4	4	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+pop12-6	12.10.5	12.4.5	12.4	5	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	10	100	NormalR	Sensible	Tolerant	Sensible	coral
+pop12-3	12.10.8	12.4.8	12.4	8	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+pop12-4	12.11.6	12.5.6	12.5	6	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+pop12-1	12.11.8	12.5.8	12.5	8	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+pop12-5	12.11.10	12.5.10	12.5	10	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	0	0	Resistant	Resistant	Superresistant	Resistant	coral
+pop12-7	12.12.2	12.6.2	12.6	2	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	10	100	NormalR	Sensible	Tolerant	Sensible	coral
+pop12-8	12.12.7	12.6.7	12.6	7	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	0	0	Resistant	Resistant	Superresistant	Sensible	coral
+pop12-9	12.12.8	12.6.8	12.6	8	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	90	100	NormalS	Sensible	Sensible	Sensible	coral
+pop12-10	12.12.10	12.6.10	12.6	10	T-1	O	yellow	Sagres	Portugal	18.15	15	10_15	37.012129	-8.924541	60	100	Normal	Sensible	Sensible	Sensible	coral
+Cyclops-1	food	food	food	food	food	food	food	food	food		food	food	food	food	food	food	food	food	food	food	food
+Cyclops-2	food	food	food	food	food	food	food	food	food		food	food	food	food	food	food	food	food	food	food	food
+Cyclops-3	food	food	food	food	food	food	food	food	food		food	food	food	food	food	food	food	food	food	food	food
+WMC-T0	water	water	water	water	T0	C	water	water	Medes 		water	water	water	water	water	water	water	water	water	water	water
+WMC-T1	water	water	water	water	T1	C	water	water	Medes 		water	water	water	water	water	water	water	water	water	water	water
+WMC-T2	water	water	water	water	T2	C	water	water	Medes 		water	water	water	water	water	water	water	water	water	water	water
+WMC-T3	water	water	water	water	T3	C	water	water	Medes 		water	water	water	water	water	water	water	water	water	water	water
+WPC-T0	water	water	water	water	T0	C	water	water	Portofino		water	water	water	water	water	water	water	water	water	water	water
+WPC-T1	water	water	water	water	T1	C	water	water	Portofino		water	water	water	water	water	water	water	water	water	water	water
+WPC-T2	water	water	water	water	T2	C	water	water	Portofino		water	water	water	water	water	water	water	water	water	water	water
+WPC-T3	water	water	water	water	T3	C	water	water	Portofino		water	water	water	water	water	water	water	water	water	water	water
+WMT-T0	water	water	water	water	T0	T	water	water	Medes 		water	water	water	water	water	water	water	water	water	water	water
+WMT-T1	water	water	water	water	T1	T	water	water	Medes 		water	water	water	water	water	water	water	water	water	water	water
+WMT-T2	water	water	water	water	T2	T	water	water	Medes 		water	water	water	water	water	water	water	water	water	water	water
+WMT-T3	water	water	water	water	T3	T	water	water	Medes 		water	water	water	water	water	water	water	water	water	water	water
+WPT-T0	water	water	water	water	T0	T	water	water	Portofino		water	water	water	water	water	water	water	water	water	water	water
+WPT-T1	water	water	water	water	T1	T	water	water	Portofino		water	water	water	water	water	water	water	water	water	water	water
+WPT-T2	water	water	water	water	T2	T	water	water	Portofino		water	water	water	water	water	water	water	water	water	water	water
+WPT-T3	water	water	water	water	T3	T	water	water	Portofino		water	water	water	water	water	water	water	water	water	water	water
