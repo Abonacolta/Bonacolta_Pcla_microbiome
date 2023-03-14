@@ -1,0 +1,1738 @@
+---
+title: "Pcla_ISEP"
+author: "Anthony Bonacolta"
+date: "6/29/2021"
+output: html_document
+---
+
+# Set-up
+## Load Packages
+```{r Packages, include=FALSE}
+library(phyloseq); packageVersion("phyloseq")
+library(Biostrings); packageVersion("Biostrings")
+library(ggplot2); packageVersion("ggplot2")
+library(vegan); packageVersion("vegan")
+library(viridis); packageVersion("viridis")
+library(tidyr); packageVersion("tidyr")
+library("plyr"); packageVersion("plyr")
+library("dplyr"); packageVersion("dplyr")
+library("scales"); packageVersion("scales")
+library("grid"); packageVersion("grid")
+library("reshape2"); packageVersion("reshape2")
+library("edgeR"); packageVersion("edgeR")
+library("tidyr"); packageVersion("tidyr")
+library("viridis"); packageVersion("viridis")
+library("gridExtra"); packageVersion("gridExtra")
+library("ape"); packageVersion("ape")
+library("microbiome"); packageVersion("microbiome")
+library(ggjoy); packageVersion("ggjoy")
+#library(ggtree); packageVersion("ggtree")
+library(ggstance); packageVersion("ggstance")
+library(ape); packageVersion("ape")
+library("tidyverse"); packageVersion("tidyverse")
+library(phylotools);packageVersion("phylotools")
+```
+
+## Load Data and Filter Data
+**Note: Taxonomy file was manually curated for NA's and Coccidians were marked as Eimeridians/Corallicolids.**
+## Bacteriome
+```{r, echo=TRUE}
+SV_bac <- read.table("/Volumes/projects/bonacolta/pcla/paramuricea_bacteriome/new/analysis/ASVs_counts.tsv", row.names = 1, check.names= FALSE, sep = "\t", header = TRUE)
+tax_bac <-as.matrix(read.table("/Volumes/projects/bonacolta/pcla/paramuricea_bacteriome/new/analysis/ASVs_taxonomy-FINAL.txt", row.names = 1, header = TRUE, sep = "\t"))
+map_bac <- read.table("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2022\ Paramuricea/Paramuricea_metadata_AMB3.txt", row.names = 1, sep ="\t", header = TRUE)
+#tree_bac <- read.tree(file = "/Volumes/projects/bonacolta/pcla/paramuricea_bacteriome/new/analysis/tree-new.nw")
+dat_bac <- read_csv("/Volumes/projects/bonacolta/pcla/paramuricea_bacteriome/new/analysis/ASV_names.csv",col_names = TRUE)
+dat_bac <- data.frame(dat_bac)
+#new_tree <- sub.taxa.label(tree_bac, dat_bac)
+ps_bac = phyloseq(otu_table(SV_bac, taxa_are_rows=TRUE), 
+               sample_data(map_bac), 
+               tax_table(tax_bac))
+
+sample_data(ps_bac)$resitance_14_21 = recode(sample_data(ps_bac)$resitance_14_21,
+                                  Hypersensible = "Hyper Sensitive",
+                                  Sensible = "Sensitive",
+                                  Resistant = "Resistant",
+                                  Superresistant = "Super Resistant")
+
+psf_bac <- subset_taxa(ps_bac, (Order!="Chloroplast"| is.na(Order)))
+psf_bac<- subset_taxa(psf_bac, (Family!="Mitochondria"| is.na(Family)))
+psf_bac <- prune_samples(sample_sums(psf_bac)>=250, psf_bac)
+f1<- filterfun_sample(topf(0.99))
+wh1 <- genefilter_sample(psf_bac, f1, A=2)
+psf_bac <- prune_taxa(wh1, psf_bac)
+psf_bac_coral<- subset_samples(psf_bac, psf_bac@sam_data$rack!='food')
+psf_bac_coral <- subset_samples(psf_bac_coral, psf_bac_coral@sam_data$rack!='water')
+psf_bac_coral_Tmin <- subset_samples(psf_bac_coral, psf_bac_coral@sam_data$time=='T-1')
+psf_bac_coral_Tmin
+```
+**92 samples**
+
+## Eukaryome
+```{r, echo=TRUE}
+SV_euk <- read.table("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/ASVs_counts.tsv", row.names = 1, check.names= FALSE, sep = "\t", header = TRUE)
+tax_euk <-as.matrix(read.table("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/ASVs_taxonomy-curated-10082021.tsv", row.names = 1, header = TRUE, sep = "\t"))
+map_euk <- read.table("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2022\ Paramuricea/Paramuricea_metadata_AMB_fixedsamples_NAs_fixed_water.txt", row.names = 1, sep ="\t", header = TRUE)
+#tree_euk <- read.tree(file = "/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/FastTree_pcla_18S")
+
+ps_euk = phyloseq(otu_table(SV_euk, taxa_are_rows=TRUE), 
+               sample_data(map_euk), 
+               tax_table(tax_euk))
+
+sample_data(ps_euk)$resitance_14_21 = recode(sample_data(ps_euk)$resitance_14_21,
+                                  Hypersensible = "Hyper Sensitive",
+                                  Sensible = "Sensitive",
+                                  Resistant = "Resistant",
+                                  Superresistant = "Super Resistant")
+
+psf_euk<- subset_taxa(ps_euk, (Order!="Chloroplast"| is.na(Order)))
+psf_euk <- subset_taxa(psf_euk, (Family!="Mitochondria"| is.na(Family)))
+psf_euk <- subset_taxa(psf_euk, (Division!="Metazoa"| is.na(Division)))
+psf_euk <- subset_taxa(psf_euk, (Class!="Embryophyceae"| is.na(Class)))
+psf_euk <- prune_samples(sample_sums(psf_euk)>=250, psf_euk)
+f1<- filterfun_sample(topf(0.99))
+wh1 <- genefilter_sample(psf_euk, f1, A=2)
+psf_euk<- prune_taxa(wh1, psf_euk)
+psf_euk_coral<- subset_samples(psf_euk, psf_euk@sam_data$rack!='food')
+psf_euk_coral <- subset_samples(psf_euk_coral, psf_euk_coral@sam_data$rack!='water')
+psf_euk_coral_Tmin <- subset_samples(psf_euk_coral, psf_euk_coral@sam_data$time=='T-1')
+psf_euk_coral_Tmin
+
+noport <- subset_samples(psf_euk_coral_Tmin, psf_euk_coral_Tmin@sam_data$region!="Portugal")
+noport_bac <- subset_samples(psf_bac_coral_Tmin, psf_bac_coral_Tmin@sam_data$region!="Portugal")
+```
+**138 samples**
+
+## Other files and color palettes
+```{r misc, include=FALSE}
+euk_classes_csv <- read.csv("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/sorted_euk_classes.txt",header=F)
+euk_classes <- euk_classes_csv %>% pull(V1)
+euk_families_csv <- read.csv("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/sorted_euk_families.txt",header=F)
+euk_families <- euk_families_csv %>% pull(V1)
+euk_orders_csv <- read.csv("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/sorted_euk_orders.txt",header=F)
+euk_orders <- euk_orders_csv %>% pull(V1)
+
+bac_classes_csv <- read.csv("/Volumes/projects/bonacolta/pcla/paramuricea_bacteriome/new/analysis/sorted_bac_classes.txt",header=F)
+bac_classes <- bac_classes_csv %>% pull(V1)
+bac_families_csv <- read.csv("/Volumes/projects/bonacolta/pcla/paramuricea_bacteriome/new/analysis/sorted_bac_families.txt",header=F)
+bac_families <- bac_families_csv %>% pull(V1)
+bac_orders_csv <- read.csv("/Volumes/projects/bonacolta/pcla/paramuricea_bacteriome/new/analysis/sorted_bac_orders.txt",header=F)
+bac_orders <- bac_orders_csv %>% pull(V1)
+
+library(randomcoloR)
+n <- 50
+
+palette <- distinctColorPalette(n)
+
+
+c25 <- c(
+  "dodgerblue2", "#E31A1C", # red
+  "green4",
+  "#6A3D9A", # purple
+  "#FF7F00", # orange
+  "black", "gold1",
+  "skyblue2", "#FB9A99", # lt pink
+  "palegreen2",
+  "#CAB2D6", # lt purple
+  "#FDBF6F", # lt orange
+  "gray70", "khaki2",
+  "maroon", "orchid1", "deeppink1", "blue1", "steelblue4",
+  "darkturquoise", "green1", "yellow4", "yellow3",
+  "darkorange4", "brown"
+)
+
+#ordered<- c("Balun", "Mana","Altare","Indiano","Lighthouse","Gargallu","Palazzinu","Palazzu","La Vaca","Pota de Llop", "Tascons","Sagres")
+ordered<- c("Sagres","Tascons","Pota de Llop","La Vaca","Palazzu","Palazzinu","Gargallu","Lighthouse","Indiano","Altare","Mana","Balun")
+
+```
+
+
+## Corallicolid Tree (Populations)
+###Extract ASVs (kept 16)
+```{r}
+mergedGP <- subset_taxa(noport, Division=="Apicomplexa")
+f1<- filterfun_sample(topf(0.50)) # keep ASV reads only if they are in the most abundant 50% of Dinos in at least 1 of the samples in dataset
+wh1 <- genefilter_sample(mergedGP, f1, A=2)
+mergedGP2 <- prune_taxa(wh1, mergedGP)
+df <- data.frame(mergedGP2@tax_table)
+
+write.csv(rownames(df), "/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Api/Api_ASVs.csv")
+# Correct Sheet so that only ASVs are listed
+"/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Api/Api_ASVs.txt"
+```
+```{bash}
+cd /Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Api/
+
+grep -w -A 1 -f  Api_ASVs.txt ../ASVs.fa | grep -v -- "^--$" > pcla_Api_ASVs.fa
+
+hmmalign -o pcla_Api_epa_alignment.sto --dna --mapali coralicollids_seqdump.aligned.fa coralicollids.hmm pcla_Api_ASVs.fa
+
+perl ~/Desktop/scripts/stockholm2fasta.pl pcla_Api_epa_alignment.sto > pcla_Api_epa_alignment.fa
+#pcla_Api_epa_alignment.fixed.fa
+
+raxmlHPC-PTHREADS -T 4 -m GTRCAT -f v -G 0.2 -n pcla_apis_epa -s pcla_Api_epa_alignment.fixed.fa -t RAxML_bestTree.coralicollids_seqdump
+
+sed 's/QUERY___//g' RAxML_labelledTree.pcla_apis_epa | sed 's/\[I[0-9]*\]//g' > RAxML_placement_tree_pcla_Api.tre
+```
+```{r}
+noport <- subset_samples(psf_euk_coral_Tmin, psf_euk_coral_Tmin@sam_data$region!="Portugal")
+mergedGP <- noport %>% merge_samples("population")
+ASVs <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Api/Api_ASVs.txt", header=FALSE)
+ASVs  <- ASVs  %>% pull(V1)
+my_subset <- subset(t(mergedGP@otu_table@.Data), rownames(t(mergedGP@otu_table@.Data)) %in% ASVs)
+my_subset1 <- phyloseq(otu_table(my_subset, taxa_are_rows=TRUE))
+mergedGP <- merge_phyloseq(my_subset1, mergedGP@tax_table, mergedGP@sam_data)
+mergedGP <- mergedGP %>%  transform_sample_counts(function(x) {x/sum(x)*100} )
+tr <- read.tree("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Api/RAxML_placement_tree_pcla_Api.tre")
+#Made TXT with annotated names plus all the ASVS
+new_tips <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Api/tree_anno.txt", header = TRUE)
+tr <- sub.taxa.label(tr, new_tips)
+tr <- drop.tip(tr, c("KT806396_Outgroup", "KT806398_Outgroup", "GU825688_Outgroup", NA), trim.internal = TRUE)
+tr<- root(tr, outgroup ="KF579890_Corallicolidae_COR6_sp.")
+
+spec <- tax_table(mergedGP) %>% data.frame(stringsAsFactors = FALSE) %>% tibble::rownames_to_column("otu")
+p <- ggtree(tr, branch.length = "y", scale=0.09) %<+% spec 
+
+#flip node 74
+#p <- flip(p, 76, 75)
+
+gd <- p$data
+melt_data<- psmelt(mergedGP)
+
+tt <- melt_data %>% left_join(select(gd,OTU=label,x,y),by="OTU") %>%
+  arrange(factor(Sample, levels=ordered)) %>%  mutate(sample2=factor(Sample,levels=unique(Sample)),
+  col=as.numeric(sample2),x.col=scales::rescale(col,to=c(.23,.405)))
+#g <- p + geom_tiplab(size = 2, align=TRUE, linesize=.25)  + geom_treescale(x=0.05, y=0, offset=0.2, fontsize = 2.5)  +
+#  geom_tile(data=tt,aes(x=x.col,y=y,fill=factor(Sample, levels = coral_order),alpha=Abundance)) + 
+#  theme(legend.position="right", plot.title = element_text(size = 15, face = "bold", hjust = 0.5), legend.title=element_text(size=10, face="bold"), legend.text=element_text(size=8))  + ggtitle("Apicomplexa ASVs between Cnidarian Families") +
+#  scale_alpha_continuous(limits=c(0.001,100),na.value=0, range = c(0.25, 1)) + scale_fill_manual(values=c25) +scale_colour_viridis_d(option="magma") +
+#  labs(fill="Cnidarian Family", alpha= "Relative Abundance") +
+#  theme(panel.grid.major.y=element_line(), panel.grid.minor.y=element_line())
+#g
+
+
+##Changing heatmap
+g <- p + geom_tiplab(size = 4, align=TRUE, linesize=.20, hjust="right", offset=0.16, linetype=NA)  + geom_treescale(x=0.05, y=-0.5, offset=0.2, fontsize = 2.5)  +
+  geom_tile(data=tt,aes(x=x.col,y=y,fill=Abundance)) + 
+  theme(legend.position="right", plot.title = element_text(size = 15, face = "bold", hjust = 0.5), legend.title=element_text(size=10, face="bold"), legend.text=element_text(size=8)) +
+  labs(fill="Relative Abundance") + scale_fill_gradient2(low="transparent", high = "#3182bd", mid= "#deebf7",midpoint= 5,limits=c(0.0001, 100), na.value="transparent") +
+  scale_y_continuous(minor_breaks = seq(1 , 52, 1), breaks = seq(1, 52, 1), expand = c(0.013, 1)) +  scale_x_continuous(minor_breaks = seq(0.23 , .405, 0.0175), breaks = seq(0.23 , .405, 0.0175)) +
+  theme(panel.grid.major.x=element_line(size = (0.2), colour="lightgrey"), panel.grid.minor.x=element_line(size = (0.2), colour="grey"), axis.title.y = element_blank())
+g
+g$data
+## Combine again at OTU the use this reads plot.
+#Bar Plot
+mergedGP2 <- noport %>% merge_samples("time")
+
+my_subsett <- subset(t(mergedGP2@otu_table@.Data), rownames(t(mergedGP2@otu_table@.Data)) %in% ASVs)
+my_subsett1 <- phyloseq(otu_table(my_subsett, taxa_are_rows=TRUE))
+mergedGP2 <- merge_phyloseq(my_subsett1, mergedGP2@tax_table, mergedGP2@sam_data)
+
+glom <- mergedGP2  %>%  transform_sample_counts(function(x) {x/sum(x)*100} )
+glom # should list # taxa as # phyla
+data <- psmelt(glom) # create dataframe from phyloseq object
+#data$Order <- as.character(data$Order) #convert to character
+ttt <- g$data
+ttt <- ttt[with(ttt, order(+y)), ]
+target <- as.vector(ttt$label)
+tttt <- ttt[!duplicated(ttt["label"]), ]
+names(tttt)[names(tttt) == "label"] <- "OTU"
+data2 <- merge(data, tttt, by='OTU')
+data3 <- data2[data2$Abundance != "NaN", ] 
+# Add Accession names to Data3
+as <- ttt[!grepl("ASV", ttt$label),]
+as <- as[!is.na(as$label), ]
+ass <- as.vector(as$label)
+data4 <- data3 %>% add_row(OTU=ass)
+library(gdata)
+
+data4 <- data4[order(match(data4$OTU, target)), , drop = FALSE]
+# Add Sample count per OTU
+mergedGP2
+## This object has all the info. I want to extract OTU Table. Then Count how many columns have a number greater than 0. I will export thi snumber and graph it.
+df <- noport@otu_table@.Data
+df <- data.frame(df)
+df$sample_count <- apply(df[, grep("", names(df))], MARGIN = 1, 
+                function(x) sum(x > 0, na.rm = T))
+df$sample_total <- apply(df[, grep("", names(df))], MARGIN = 1, 
+                function(x) sum(x >= 0, na.rm = T))
+df$sample_percent <- df$sample_count / df$sample_total *100
+
+
+
+
+df2 <- subset(df, row.names(df) %in% target)
+
+#Need to add in Labels here to DF2 
+newlist <- grep(pattern = 'ASV', x = target, value=TRUE, invert=TRUE)
+newlist[!is.na(newlist)]
+empty <- data.frame(newlist[!is.na(newlist)])  
+empty <- empty %>% add_column(new_col = NA)
+newcol <- empty[,1]
+rownames(empty) <- newcol
+
+df2 <- dplyr::bind_rows(df2, empty)
+
+df2 <- df2[order(match(rownames(df2), target)), , drop = FALSE]
+
+#Match Samples then add zeroes for not listed
+samples <- as.vector(df2$sample_percent)
+data4$sample_percent=samples
+library(reshape2)
+
+b <- ggplot(data=data4, aes(x=y, y=Abundance, na.rm = TRUE)) + theme_classic() + geom_bar(stat="identity", fill = "#55C667FF") + coord_flip() +
+      theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.text.x= element_text(size=5), axis.title.x= element_text(size=9)) + scale_y_continuous(expand = c(0, 0), na.value=0, position = "right", breaks=c(0, 25, 50)) + guides(fill=guide_legend(title="Value")) + ylab("Relative Abundance (%)") +
+  scale_x_continuous(expand = c(0.0, 0), na.value=0, limits=c(-1.8,32.5))
+
+b
+c <- ggplot(data=data4, aes(x=y, y=sample_percent, na.rm = TRUE)) + theme_classic() + geom_bar(stat="identity", fill = "#482677FF") + coord_flip() +
+      theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.text.x= element_text(size=5), axis.title.x= element_text(size=9)) + scale_y_continuous(expand = c(0, 0), na.value=0, position = "right", breaks=c(0,50,100)) + guides(fill=guide_legend(title="Value")) + ylab("Sample Prevalence (%)") +
+  scale_x_continuous(expand = c(0.0, 0), na.value=0, limits=c(-1.8,32.5))
+
+c
+library(ggpubr)
+a<- ggarrange(b, c, ncol=2, nrow=1, align = "h", common.legend = TRUE, legend="right") 
+
+z <- ggarrange(g, a, ncol=2, nrow=1, widths = c(0.8,.40), align = "v", common.legend = TRUE, legend="right")
+z
+zz <- annotate_figure(z, fig.lab = "Heatmap of Corallicolid ASVs across Sampling Locations", fig.lab.face = "bold", fig.lab.size = 14, fig.lab.pos = "top.left")
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/manuscript/figures/main\ figs/raw/Fig4-ApiTree.pdf", width=12, height=6)
+plot(zz)
+dev.off()
+```
+## Figure 4. Combined SPARCC Network Plot
+- Network Analysis between domains
+- I need to extract sample names from psf_euk_coral_Tmin and grep out the "E-" then re-add the sample names.
+```{r}
+euk_names_fixed <- c("2-1-10-T-minus-1", "2-1-5-T-minus-1", "2-1-6-T-minus-1", "2-1-8-T-minus-1", "2-2-2-T-minus-1", "2-2-4-T-minus-1", "2-2-9-T-minus-1","3-1-1-T-minus-1", "3-1-2-T-minus-1", "3-1-3-T-minus-1", "3-1-6-T-minus-1", "3-3-1-T-minus-1", "3-3-3-T-minus-1", "3-3-4-T-minus-1", "8-4-1-T-minus-1", "8-4-4-T-minus-1", "8-4-9-T-minus-1", "8-5-10-T-minus-1", "8-5-5-T-minus-1", "pop1-1", "pop1-10", "pop1-2", "pop1-3", "pop1-4", "pop1-5", "pop1-6", "pop1-7", "pop1-8", "pop1-9", "pop10-1", "pop10-10", "pop10-2", "pop10-3", "pop10-4", "pop10-5", "pop10-6", "pop10-7", "pop10-8", "pop10-9", "pop11-1", "pop11-10", "pop11-2", "pop11-3", "pop11-4", "pop11-5", "pop11-6", "pop11-7", "pop11-8", "pop11-9", "pop12-1", "pop12-10", "pop12-2", "pop12-3", "pop12-4", "pop12-5", "pop12-6", "pop12-7", "pop12-8", "pop2-1", "pop2-10", "pop2-2", "pop2-3", "pop2-4", "pop2-5", "pop2-6", "pop2-7", "pop2-8", "pop2-9", "pop3-1", "pop3-10", "pop3-2", "pop3-3", "pop3-4", "pop3-5", "pop3-6", "pop3-7", "pop3-8", "pop3-9", "pop4-1", "pop4-10", "pop4-2", "pop4-3", "pop4-4", "pop4-5", "pop4-6", "pop4-7", "pop4-8", "pop4-9", "pop5-1", "pop5-10", "pop5-2", "pop5-3", "pop5-4", "pop5-5", "pop5-6", "pop5-7", "pop5-8", "pop5-9", "pop6-1", "pop6-10", "pop6-2", "pop6-3", "pop6-4", "pop6-5", "pop6-6", "pop6-7", "pop6-8", "pop6-9", "pop7-1", "pop7-10", "pop7-2", "pop7-3", "pop7-4", "pop7-5", "pop7-6", "pop7-7", "pop7-8", "pop7-9", "pop8-1", "pop8-10", "pop8-2", "pop8-3", "pop8-4", "pop8-5", "pop8-6", "pop8-7", "pop8-8", "pop8-9", "pop9-1", "pop9-10", "pop9-2", "pop9-3", "pop9-4", "pop9-5", "pop9-6", "pop9-7", "pop9-8", "pop9-9")
+euk_names_fixed
+
+sample_names(psf_euk_coral_Tmin) <- euk_names_fixed
+sample_names(psf_euk_coral_Tmin)
+```
+
+- Then keep only samples found in psf_bac_coral_Tmin,
+```{r}
+subset_samps <- c("2-1-5-T-minus-1" , "3-1-6-T-minus-1" , "3-3-4-T-minus-1" , "pop1-1" , "pop1-10" , "pop1-2" , "pop1-3" , "pop1-4" , "pop1-6" , "pop1-7" , "pop1-8" , "pop1-9" , "pop10-1" , "pop10-10" , "pop10-2" , "pop10-3" , "pop10-4" , "pop10-5" , "pop10-6" , "pop10-7" , "pop10-8" , "pop10-9" , "pop11-1" , "pop11-10" , "pop11-2" , "pop11-3" , "pop11-4" , "pop11-5" , "pop11-6" , "pop11-7" , "pop11-8" , "pop11-9" , "pop12-5" , "pop2-4" , "pop2-5" , "pop3-4" , "pop4-1" , "pop4-10" , "pop4-2" , "pop4-3" , "pop4-4" , "pop4-6" , "pop4-7" , "pop4-8" , "pop4-9" , "pop5-1" , "pop5-10" , "pop5-2" , "pop5-3" , "pop5-4" , "pop5-5" , "pop5-6" , "pop5-8" , "pop5-9" , "pop6-1" , "pop6-10" , "pop6-2" , "pop6-3" , "pop6-4" , "pop6-5" , "pop6-6" , "pop6-7" , "pop6-8" , "pop6-9" , "pop7-1" , "pop7-10" , "pop7-2" , "pop7-3" , "pop7-4" , "pop7-5" , "pop7-6" , "pop7-7" , "pop7-8" , "pop7-9" , "pop8-2" , "pop8-3" , "pop8-4" , "pop8-5" , "pop8-6" , "pop8-7" , "pop8-8" , "pop8-9" , "pop9-1" , "pop9-10" , "pop9-2" , "pop9-4" , "pop9-5" , "pop9-6" , "pop9-7" , "pop9-8" , "2-1-5-T-minus-1" , "3-1-6-T-minus-1" , "3-3-4-T-minus-1" , "pop1-1" , "pop1-10" , "pop1-2" , "pop1-3" , "pop1-4" , "pop1-6" , "pop1-7" , "pop1-8" , "pop1-9" , "pop10-1" , "pop10-10" , "pop10-2" , "pop10-3" , "pop10-4" , "pop10-5" , "pop10-6" , "pop10-7" , "pop10-8" , "pop10-9" , "pop11-1" , "pop11-10" , "pop11-2" , "pop11-3" , "pop11-4" , "pop11-5" , "pop11-6" , "pop11-7" , "pop11-8" , "pop11-9" , "pop12-5" , "pop2-4" , "pop2-5" , "pop3-4" , "pop4-1" , "pop4-10" , "pop4-2" , "pop4-3" , "pop4-4" , "pop4-6" , "pop4-7" , "pop4-8" , "pop4-9" , "pop5-1" , "pop5-10" , "pop5-2" , "pop5-3" , "pop5-4" , "pop5-5" , "pop5-6" , "pop5-8" , "pop5-9" , "pop6-1" , "pop6-10" , "pop6-2" , "pop6-3" , "pop6-4" , "pop6-5" , "pop6-6" , "pop6-7" , "pop6-8" , "pop6-9" , "pop7-1" , "pop7-10" , "pop7-2" , "pop7-3" , "pop7-4" , "pop7-5" , "pop7-6" , "pop7-7" , "pop7-8" , "pop7-9" , "pop8-2" , "pop8-3" , "pop8-4" , "pop8-5" , "pop8-6" , "pop8-7" , "pop8-8" , "pop8-9" , "pop9-1" , "pop9-10" , "pop9-2" , "pop9-4" , "pop9-5" , "pop9-6" , "pop9-7" , "pop9-8")
+
+network_bac <- prune_samples(subset_samps, psf_bac_coral_Tmin)
+network_euk <- prune_samples(subset_samps, psf_euk_coral_Tmin)
+sample_names(network_euk)
+sample_names(network_bac)
+
+
+merged_network <- merge_phyloseq(network_euk, network_bac)
+merged_network
+network_bac
+network_euk
+```
+
+```{r}
+library(chorddiag)
+library(htmlwidgets)
+library(circlize)
+library(webshot)
+library("microeco")
+library("file2meco")
+library(rgexf)
+library(NetCoMi)
+library(igraph)
+library(chorddiag)
+```
+
+```{r}
+tax.clean <- data.frame(tax_table(merged_network))
+tax.clean$Family[tax.clean$Family == "Dinophyceae_NA"] <- "Dinophyceae IS"
+tax.clean$Family[tax.clean$Family == "Dinophyceae_XX"] <- "Dinophyceae IS"
+tax.clean$Family[tax.clean$Family == "Apicomplexa_NA"] <- "Apicomplexa IS"
+tax_table(merged_network) <- as.matrix(tax.clean)
+
+meco_dataset <- phyloseq2meco(merged_network)
+meco_dataset
+
+#t1 <- trans_network$new(dataset = meco_dataset, cal_cor = "SparCC", taxa_level = "OTU", filter_thres = 0.00001, SparCC_simu_num = 100)
+t1$cal_network(network_method="SpiecEasi", p_thres = 0.05)
+
+#t1network <- t1$cal_network(network_method="SpiecEasi", p_thres = 0.1)
+#t1$save_network(filepath = "/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/paramuricea_microbiome/Figures/Manuscript/ISEP/network_genus.gexf")
+# Open in Gephi and save as gexf again, then continue below
+#gexf1 <- read.gexf("/Volumes/projects/bonacolta/coral_euks/analysis/network/network_working.gexf")
+#igraph1 <- gexf.to.igraph(gexf1)
+
+t1$cal_network_attr()
+#t1$cal_node_type()
+#t1$plot_taxa_roles(use_type = 1)
+t1$cal_eigen()
+t1$cal_sum_links(taxa_level = "Family")
+t1$plot_sum_links(plot_pos = TRUE, plot_num = 10) # Plot_pos is true, so positive linkages ar eplotted. 
+
+p <- t1$plot_sum_links(plot_pos = TRUE, plot_num = 20)
+p$x$option
+
+mat3 = p$x$matrix
+
+for(cn in intersect(rownames(mat3), colnames(mat3))) {
+    mat3[cn, cn] = 0
+}
+
+chord <- chorddiag(mat3, groupColors=palette, groupnameFontsize=10, margin=155, showTicks=FALSE, groupnamePadding = 10)
+chord
+
+
+save_html(chord, "/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/paramuricea_microbiome/Figures/Manuscript/Network_10082021.html")
+
+save(chord, file="/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/paramuricea_microbiome/Figures/Manuscript/Network_10082021.rds")
+
+save(t1, file="/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/paramuricea_microbiome/Figures/Manuscript/Network_10082021_t1.rds")
+```
+
+## Alpha Diversity Plots Combined
+```{r}
+library(microbiome)
+library(ggpubr)
+library(knitr)
+library(dplyr)
+
+ad <- prune_taxa(taxa_sums(noport) > 0, noport)
+tab <- microbiome::alpha(ad, index = "shannon")
+kable(head(tab))
+
+ps1.meta <- meta(ad)
+kable(head(ps1.meta))
+ps1.meta$Shannon <- tab$diversity_shannon 
+
+# create a list of pairwise comaprisons
+fam <- unique(ps1.meta$region) # get the variables
+
+
+# make a pairwise list that we want to compare.
+fam.pairs <- combn(seq_along(fam), 2, simplify = FALSE, FUN = function(i)fam[i])
+
+print(fam.pairs)
+
+#ps1.meta$'' <- alpha(ps1, index = 'shannon')
+p1 <- ggboxplot(ps1.meta, x = "region", y = "Shannon",
+ add = "boxplot", fill = "region", order = c("Medes ", "Scandola", "Portofino", "Croatia")) + theme_classic() + theme(axis.text.x = element_text(angle = 0, hjust = 0.5)) + scale_fill_viridis_d() + 
+  labs(fill='Region', title="Shannon-Wiener Alpha Diversity of Eukaryome", x="Region", y="Shannon-Wiener Diversity Index") + ylim(0,8)
+
+p1 <- p1 + stat_compare_means(comparisons = fam.pairs) 
+print(p1)
+
+
+ad2 <- prune_taxa(taxa_sums(noport_bac) > 0, noport_bac)
+tab2 <- microbiome::alpha(ad2, index = "shannon")
+kable(head(tab2))
+ps1.meta2 <- meta(ad2)
+kable(head(ps1.meta))
+ps1.meta2$Shannon <- tab2$diversity_shannon 
+# create a list of pairwise comaprisons
+fam2 <- unique(ps1.meta2$region) # get the variables
+# make a pairwise list that we want to compare.
+fam.pairs2 <- combn(seq_along(fam2), 2, simplify = FALSE, FUN = function(i)fam2[i])
+print(fam.pairs2)
+#ps1.meta$'' <- alpha(ps1, index = 'shannon')
+p2 <- ggboxplot(ps1.meta2, x = "region", y = "Shannon",
+ add = "boxplot", fill = "region", order = c("Medes ", "Scandola", "Portofino", "Croatia")) + theme_classic() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + scale_fill_viridis_d() + 
+  labs(fill='Region', title="Shannon-Wiener Alpha Diversity of Prokaryome", x="Region", y="Shannon-Wiener Diversity Index") + ylim(0,8)
+p2 <- p2 + stat_compare_means(comparisons = fam.pairs2) 
+print(p2)
+
+p3 <- ggarrange(p2, p1, nrow=2, align="v",legend="none")
+
+p3
+
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2022\ Paramuricea/manuscript/figures/main\ figs/raw/Fig2S_Alpha_region.pdf", width=4, height=8)
+plot(p3)
+dev.off()
+```
+
+### Alphas
+```{r}
+library(microbiome)
+library(ggpubr)
+library(knitr)
+library(dplyr)
+
+ad <- prune_taxa(taxa_sums(noport) > 0, noport)
+tab <- microbiome::alpha(ad, index = "shannon")
+kable(head(tab))
+
+ps1.meta <- meta(ad)
+kable(head(ps1.meta))
+ps1.meta$Shannon <- tab$diversity_shannon 
+
+# create a list of pairwise comaprisons
+fam <- unique(ps1.meta$resitance_14_21) # get the variables
+
+
+# make a pairwise list that we want to compare.
+fam.pairs <- combn(seq_along(fam), 2, simplify = FALSE, FUN = function(i)fam[i])
+
+print(fam.pairs)
+
+#ps1.meta$'' <- alpha(ps1, index = 'shannon')
+p1 <- ggboxplot(ps1.meta, x = "resitance_14_21", y = "Shannon",
+ add = "boxplot", fill = "resitance_14_21", order = c("Hyper Sensitive", "Sensitive", "Tolerant","Resistant", "Super Resistant")) + theme_classic() + theme(axis.text.x = element_text(angle = 0, hjust = 0.5)) + scale_fill_viridis_d() + 
+  labs(fill='Thermal Tolerance', title="Shannon-Wiener Alpha Diversity of Eukaryome", x="Region", y="Shannon-Wiener Diversity Index") + ylim(0,8)
+
+p1 <- p1 + stat_compare_means(comparisons = fam.pairs) 
+print(p1)
+
+
+ad2 <- prune_taxa(taxa_sums(noport_bac) > 0, noport_bac)
+tab2 <- microbiome::alpha(ad2, index = "shannon")
+kable(head(tab2))
+ps1.meta2 <- meta(ad2)
+kable(head(ps1.meta))
+ps1.meta2$Shannon <- tab2$diversity_shannon 
+# create a list of pairwise comaprisons
+fam2 <- unique(ps1.meta2$resitance_14_21) # get the variables
+# make a pairwise list that we want to compare.
+fam.pairs2 <- combn(seq_along(fam2), 2, simplify = FALSE, FUN = function(i)fam2[i])
+print(fam.pairs2)
+#ps1.meta$'' <- alpha(ps1, index = 'shannon')
+p2 <- ggboxplot(ps1.meta2, x = "resitance_14_21", y = "Shannon",
+ add = "boxplot", fill = "resitance_14_21", order = c("Hyper Sensitive", "Sensitive", "Tolerant","Resistant", "Super Resistant")) + theme_classic() + theme(axis.text.x = element_text(angle = 45, hjust =1)) + scale_fill_viridis_d() + 
+  labs(fill='Thermal Tolerance', title="Shannon-Wiener Alpha Diversity of Prokaryome", x="Thermal Tolerance", y="Shannon-Wiener Diversity Index") + ylim(0,8)
+p2 <- p2 + stat_compare_means(comparisons = fam.pairs2) 
+print(p2)
+
+p3 <- ggarrange(p2, p1, nrow=2, align="v", legend="none")
+
+p3
+
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2022\ Paramuricea/manuscript/figures/main\ figs/raw/Fig3S_Alpha_res.pdf", width=4, height=8)
+plot(p3)
+dev.off()
+```
+
+## Betas
+```{r}
+ps_clr_euk <- microbiome::transform(noport, 'clr', shift = 1)
+psr_clr.ord_euk <- ordinate(ps_clr_euk, "RDA", "euclidean")
+PCA_euk = plot_ordination(ps_clr_euk, psr_clr.ord_euk, 
+                                color="region",
+                                title="Aitchison Distance PCA of Eukaryome") + theme_classic() + geom_point(aes(color = region), alpha = 0.8, size = 3) + scale_colour_viridis_d() + labs(color="Region") + stat_ellipse()
+
+PCA_euk
+
+
+ps_clr_bac <- microbiome::transform(noport_bac, 'clr', shift = 1)
+psr_clr.ord_bac <- ordinate(ps_clr_bac, "RDA", "euclidean")
+PCA_bac = plot_ordination(ps_clr_bac, psr_clr.ord_bac, 
+                                color="region",
+                                title="Aitchison Distance PCA of Prokaryome") + theme_classic() + geom_point(aes(color = region), alpha = 0.8, size = 3) + scale_colour_viridis_d() + labs(color="Region") + stat_ellipse()
+
+PCA_bac
+
+PCA <- ggarrange(PCA_bac,PCA_euk, nrow=2, align="v", common.legend = TRUE, legend="right")
+
+PCA
+
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/manuscript/figures/main\ figs/raw/Fig4S-Beta-region.pdf", width=8, height=8)
+plot(PCA)
+dev.off()
+```
+
+### Beta Stats
+```{r}
+library(ALDEx2);packageVersion("ALDEx2")
+library(vegan); packageVersion("vegan")
+library(CoDaSeq); packageVersion("CoDaSeq")
+
+taxon <- noport_bac@tax_table
+d.czm <- cmultRepl(noport_bac@otu_table, method="CZM", label=0)
+d.clr <- codaSeq.clr(d.czm)
+E.clr <- t(d.clr)
+d.pcx <- prcomp(E.clr)
+dist.clr <- dist(E.clr)
+
+var1 <- noport_bac@sam_data$region 
+ano.var1 <- anosim(dist.clr, var1, permutations=999)
+plot(ano.var1)
+
+perm<-adonis(dist.clr~region,as(sample_data(noport_bac),"data.frame"))
+print(perm)
+
+```
+
+```{r}
+taxon <- noport@tax_table
+d.czm <- cmultRepl(noport@otu_table, method="CZM", label=0)
+d.clr <- codaSeq.clr(d.czm)
+E.clr <- t(d.clr)
+d.pcx <- prcomp(E.clr)
+dist.clr <- dist(E.clr)
+
+var1 <- noport@sam_data$region 
+ano.var1 <- anosim(dist.clr, var1, permutations=999)
+plot(ano.var1)
+
+perm<-adonis(dist.clr~region,as(sample_data(noport),"data.frame"))
+print(perm)
+```
+
+```{r}
+ps_clr_euk <- microbiome::transform(noport, 'clr', shift = 1)
+psr_clr.ord_euk <- ordinate(ps_clr_euk, "RDA", "euclidean")
+PCA_euk = plot_ordination(ps_clr_euk, psr_clr.ord_euk, 
+                                color="resitance_14_21",
+                                title="Aitchison Distance PCA of Eukaryome") + theme_classic() + geom_point(aes(color = resitance_14_21), alpha = 0.8, size = 3) + scale_colour_viridis_d() + labs(color="Thermal Tolerance") + stat_ellipse()
+
+PCA_euk
+
+
+ps_clr_bac <- microbiome::transform(noport_bac, 'clr', shift = 1)
+psr_clr.ord_bac <- ordinate(ps_clr_bac, "RDA", "euclidean")
+PCA_bac = plot_ordination(ps_clr_bac, psr_clr.ord_bac, 
+                                color="resitance_14_21",
+                                title="Aitchison Distance PCA of Prokaryome") + theme_classic() + geom_point(aes(color = resitance_14_21), alpha = 0.8, size = 3) + scale_colour_viridis_d() + labs(color="Thermal Tolerance") + stat_ellipse()
+
+PCA_bac
+
+PCA <- ggarrange(PCA_bac,PCA_euk, nrow=2, align="v", common.legend = TRUE, legend="right")
+
+PCA
+
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/manuscript/figures/main\ figs/raw/Fig5S-Beta-Res.pdf", width=8, height=8)
+plot(PCA)
+dev.off()
+```
+
+```{r}
+taxon <- noport@tax_table
+d.czm <- cmultRepl(noport@otu_table, method="CZM", label=0)
+d.clr <- codaSeq.clr(d.czm)
+E.clr <- t(d.clr)
+d.pcx <- prcomp(E.clr)
+dist.clr <- dist(E.clr)
+
+var1 <- noport@sam_data$resitance_14_21 
+ano.var1 <- anosim(dist.clr, var1, permutations=999)
+plot(ano.var1)
+
+perm<-adonis(dist.clr~resitance_14_21,as(sample_data(noport),"data.frame"))
+print(perm)
+```
+```{r}
+taxon <- noport_bac@tax_table
+d.czm <- cmultRepl(noport_bac@otu_table, method="CZM", label=0)
+d.clr <- codaSeq.clr(d.czm)
+E.clr <- t(d.clr)
+d.pcx <- prcomp(E.clr)
+dist.clr <- dist(E.clr)
+
+var1 <- noport_bac@sam_data$resitance_14_21 
+ano.var1 <- anosim(dist.clr, var1, permutations=999)
+plot(ano.var1)
+
+perm<-adonis(dist.clr~resitance_14_21,as(sample_data(noport_bac),"data.frame"))
+print(perm)
+```
+
+## Bubble Plot of Prok Thermal Tolerances (Endozoicomonas Removed)
+```{r}
+no_endo <- subset_taxa(noport_bac, (Family!="Endozoicomonadaceae"| is.na(Family)))
+bub <- merge_samples(no_endo, "resitance_14_21") 
+type_taxa <- bub %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)*100} )  
+
+type_taxa <- type_taxa %>% 
+  psmelt() %>% 
+  arrange(Abundance) 
+
+
+library(data.table)
+# create dataframe from phyloseq object
+dat <- data.table(type_taxa)
+# convert Phylum to a character vector from a factor because R
+dat$Order <- as.character(dat$Order)
+# group dataframe by Phylum, calculate median rel. abundance
+dat[, median := median(Abundance, na.rm = FALSE), 
+    by = "Order"]
+# Change name to remainder of Phylum less than 2%
+dat[(median <= 0.01), Order := "Below Threshold"]
+dat[(Order == "Below Threshold"), Phylum := "Other"]
+
+dat$Order[dat$Order == "Omnitrophia_NA"] <- "Omnitrophia IS"
+dat$Order[dat$Order == "Gammaproteobacteria_NA"] <- "Gammaproteobacteria IS"
+dat$Order[dat$Order == "Bacilli_NA"] <- "Bacilli IS"
+dat$Order[dat$Order == "Bacteria_NA"] <- "Bacteria IS"
+dat$Order[dat$Order == "Bacillariophyta_X"] <- "Bacillariophyta IS"
+dat$Phylum[dat$Phylum == "Bacteria_NA"] <- "Bacteria IS"
+dat$Order[dat$Order == "Alphaproteobacteria_NA"] <- "Alphaproteobacteria IS"
+
+my_title <- expression(paste("Prokaryotic Orders within ", italic("P. clavata")))
+
+xx <- ggplot(dat[Abundance > 0], aes(x = factor(Sample, levels=c("Hyper Sensitive", "Sensitive", "Tolerant","Resistant", "Super Resistant")), y = factor(Order, levels=bac_orders))) + geom_point(aes(size = Abundance, fill=Phylum), alpha = 1, shape = 21) + 
+  scale_size_continuous(limits = c(0.000001, 100), range = c(0.1,10), breaks = c(1,10,50,75)) + 
+  labs( x= "Thermal Tolerance", y = "Prokaryotic Order", size = "Relative Abundance %", fill="Prokaryotic Phylum") + theme_bw() +  
+  scale_fill_manual(values = c25, breaks=c('Verrucomicrobiota', 'Proteobacteria', 'Firmicutes', 'Cyanobacteria', 'Bacteroidota', 'Campilobacterota', 'Bacteria IS', 'Other')) + theme(axis.text.x = element_text(angle = 40, hjust = 1)) + 
+  ggtitle(label=my_title, subtitle = "With no Endozoicomonadaceae \n& a median relative abundance above 1%") 
+xx
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/manuscript/figures/main\ figs/raw/Fig6S-BacRes_noEndo.pdf", width=7, height=5)
+plot(xx)
+dev.off()
+```
+
+
+## Dinoflagellate Tree (Populations)
+Extract Dino ASVs
+```{r}
+mergedGP <- subset_taxa(psf_euk_coral_Tmin, Division=="Dinoflagellata")
+f1<- filterfun_sample(topf(0.50)) # keep DINO ASV reads only if they are in the most abundant 50% of Dinos in at least 1 of the samples in dataset
+wh1 <- genefilter_sample(mergedGP, f1, A=2)
+mergedGP2 <- prune_taxa(wh1, mergedGP)
+df <- data.frame(mergedGP2@tax_table)
+
+write.csv(rownames(df), "/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino_ASVs.csv")
+# Correct Sheet so that only ASVs are listed
+"/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino/Dino_ASVs.txt"
+```
+```{bash}
+cd /Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino/
+
+grep -w -A 1 -f  Dino_ASVs.txt ASVs.fa | grep -v -- "^--$" > pcla_Dinos_ASVs.fa
+
+mafft --auto pcla_Dinos_ASVs.fa > pcla_Dinos_ASVs.aligned.fa
+
+raxmlHPC-PTHREADS -T 4 -m GTRCAT -p 31415 -x 20398 -d -f a -N 1000 -n pcla_Dinos_ASVs -s pcla_Dinos_ASVs.aligned.fa 
+
+sed 's/QUERY___//g' pcla_Dinos_ASVs | sed 's/\[I[0-9]*\]//g' > pcla_Dinos_ASVs.tre
+```
+```{bash}
+cat /Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/ASVs_taxonomy-curated-FINAL_2.txt | grep -w -A 1 -f Dino_ASVs.txt > pcla_Dino_ASVs_names.txt 
+
+# Take out bad info a relabel for tree
+```
+
+```{r}
+mergedGP <- noport %>% merge_samples("population")
+ASVs <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino/Dino_ASVs.txt", header=FALSE)
+ASVs  <- ASVs  %>% pull(V1)
+my_subset <- subset(t(mergedGP@otu_table@.Data), rownames(t(mergedGP@otu_table@.Data)) %in% ASVs)
+my_subset1 <- phyloseq(otu_table(my_subset, taxa_are_rows=TRUE))
+mergedGP <- merge_phyloseq(my_subset1, mergedGP@tax_table, mergedGP@sam_data)
+mergedGP <- mergedGP %>%  transform_sample_counts(function(x) {x/sum(x)*100} )
+tr <- read.tree("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino/pcla_Dinos_ASVs.tre")
+#Made TXT with annotated names plus all the ASVS
+new_tips <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino/pcla_Dino_ASVs_names.txt", header = TRUE)
+tr <- sub.taxa.label(tr, new_tips)
+#tr <- drop.tip(tr, c("KT806396_Outgroup", "KT806398_Outgroup", "GU825688_Outgroup"), trim.internal = TRUE)
+tr<- root(tr, node =37)
+
+spec <- tax_table(mergedGP) %>% data.frame(stringsAsFactors = FALSE) %>% tibble::rownames_to_column("otu")
+p <- ggtree(tr, branch.length = "y", scale=0.09) %<+% spec 
+
+#flip node 74
+p <- flip(p, 40, 37)
+#p +geom_text(aes(label=node))
+gd <- p$data
+melt_data<- psmelt(mergedGP)
+
+melt_data[] <- lapply(melt_data, function(x) {
+   inds <- match(x, new_tips$tip)
+   ifelse(is.na(inds),x, new_tips$new_name[inds]) 
+})
+
+tt <- melt_data %>% left_join(select(gd,OTU=label,x,y),by="OTU") %>%
+  arrange(factor(Sample, levels=ordered)) %>%  mutate(sample2=factor(Sample,levels=unique(Sample)),
+  col=as.numeric(sample2),x.col=scales::rescale(col,to=c(0.80,1.15)))
+#g <- p + geom_tiplab(size = 2, align=TRUE, linesize=.25)  + geom_treescale(x=0.05, y=0, offset=0.2, fontsize = 2.5)  +
+#  geom_tile(data=tt,aes(x=x.col,y=y,fill=factor(Sample, levels = coral_order),alpha=Abundance)) + 
+#  theme(legend.position="right", plot.title = element_text(size = 15, face = "bold", hjust = 0.5), legend.title=element_text(size=10, face="bold"), legend.text=element_text(size=8))  + ggtitle("Apicomplexa ASVs between Cnidarian Families") +
+#  scale_alpha_continuous(limits=c(0.001,100),na.value=0, range = c(0.25, 1)) + scale_fill_manual(values=c25) +scale_colour_viridis_d(option="magma") +
+#  labs(fill="Cnidarian Family", alpha= "Relative Abundance") +
+#  theme(panel.grid.major.y=element_line(), panel.grid.minor.y=element_line())
+#g
+
+
+##Changing heatmap
+g <- p + geom_tiplab(size = 4, align=TRUE, linesize=.20, hjust="right", offset=0.40, linetype=NA)  + geom_treescale(x=0.05, y=-0.5, offset=0.2, fontsize = 2.5)  +
+  geom_tile(data=tt,aes(x=x.col,y=y,fill=Abundance)) + 
+  theme(legend.position="right", plot.title = element_text(size = 15, face = "bold", hjust = 0.5), legend.title=element_text(size=10, face="bold"), legend.text=element_text(size=8)) +
+  labs(fill="Relative Abundance") + scale_fill_gradient2(low="transparent", high = "#3182bd", mid= "#deebf7",midpoint= 5,limits=c(0.0001, 100), na.value="transparent") +
+  scale_y_continuous(minor_breaks = seq(1 , 52, 1), breaks = seq(1, 52, 1), expand = c(0.013, 1)) +  scale_x_continuous(minor_breaks = seq(0.80,1.15, 0.035), breaks = seq(0.80,1.15, 0.035)) +
+  theme(panel.grid.major.x=element_line(size = (0.2), colour="lightgrey"), panel.grid.minor.x=element_line(size = (0.2), colour="grey"), axis.title.y = element_blank())
+g
+g$data
+## Combine again at OTU the use this reads plot.
+#Bar Plot
+mergedGP2 <- noport %>% merge_samples("time")
+
+my_subsett <- subset(t(mergedGP2@otu_table@.Data), rownames(t(mergedGP2@otu_table@.Data)) %in% ASVs)
+my_subsett1 <- phyloseq(otu_table(my_subsett, taxa_are_rows=TRUE))
+mergedGP2 <- merge_phyloseq(my_subsett1, mergedGP2@tax_table, mergedGP2@sam_data)
+
+glom <- mergedGP2  %>%  transform_sample_counts(function(x) {x/sum(x)*100} )
+glom # should list # taxa as # phyla
+data <- psmelt(glom) 
+
+data[] <- lapply(data, function(x) {
+   inds <- match(x, new_tips$tip)
+   ifelse(is.na(inds),x, new_tips$new_name[inds]) 
+})
+
+
+# create dataframe from phyloseq object
+#data$Order <- as.character(data$Order) #convert to character
+ttt <- g$data
+ttt <- ttt[with(ttt, order(+y)), ]
+target <- as.vector(ttt$label)
+tttt <- ttt[!duplicated(ttt["label"]), ]
+names(tttt)[names(tttt) == "label"] <- "OTU"
+data2 <- merge(data, tttt, by='OTU')
+data3 <- data2[data2$Abundance != "NaN", ] 
+# Add Accession names to Data3
+as <- ttt[!grepl("0.", ttt$label),]
+as <- as[!is.na(as$label), ]
+ass <- as.vector(as$label)
+data4 <- data3
+library(gdata)
+
+data4 <- data4[order(match(data4$OTU, target)), , drop = FALSE]
+# Add Sample count per OTU
+mergedGP2
+## This object has all the info. I want to extract OTU Table. Then Count how many columns have a number greater than 0. I will export thi snumber and graph it.
+df <- noport@otu_table@.Data
+df <- data.frame(df)
+df$sample_count <- apply(df[, grep("", names(df))], MARGIN = 1, 
+                function(x) sum(x > 0, na.rm = T))
+df$sample_total <- apply(df[, grep("", names(df))], MARGIN = 1, 
+                function(x) sum(x >= 0, na.rm = T))
+df$sample_percent <- df$sample_count / df$sample_total *100
+
+
+row.names(df) <- lapply(row.names(df), function(x) {
+   inds <- match(x, new_tips$tip)
+   ifelse(is.na(inds),x, new_tips$new_name[inds]) 
+})
+
+df2 <- subset(df, row.names(df) %in% target)
+
+
+df2 <- df2[order(match(rownames(df2), target)), , drop = FALSE]
+
+#Match Samples then add zeroes for not listed
+samples <- as.vector(df2$sample_percent)
+data4$sample_percent=samples
+library(reshape2)
+
+b <- ggplot(data=data4, aes(x=y, y=Abundance, na.rm = TRUE)) + theme_classic() + geom_bar(stat="identity", fill = "#55C667FF") + coord_flip() +
+      theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.text.x= element_text(size=4), axis.title.x= element_text(size=9)) + scale_y_continuous(expand = c(0, 0), na.value=0, position = "right", breaks=c(0, 15, 30)) + guides(fill=guide_legend(title="Value")) + ylab("Abundance %") +
+  scale_x_continuous(expand = c(0.00, 0), na.value=0, limits=c(-1.5, 28.5))
+
+b
+c <- ggplot(data=data4, aes(x=y, y=sample_percent, na.rm = TRUE)) + theme_classic() + geom_bar(stat="identity", fill = "#482677FF") + coord_flip() +
+      theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.text.x= element_text(size=4), axis.title.x= element_text(size=9)) + scale_y_continuous(expand = c(0, 0), na.value=0, position = "right", breaks=c(0,25,50, 75)) + guides(fill=guide_legend(title="Value")) + ylab("Sample %") +
+  scale_x_continuous(expand = c(0.00, 0), na.value=0, limits=c(-1.5, 28.5))
+c
+
+a<- ggarrange(b, c, ncol=2, nrow=1, align = "h", common.legend = TRUE, legend="right") 
+
+z <- ggarrange(g, a, ncol=2, nrow=1, widths = c(0.85,.25), align = "v", common.legend = TRUE, legend="right") 
+z
+
+zz <- annotate_figure(z, fig.lab = "Heatmap of Dinoflagellate ASVs across Sampling Locations", fig.lab.face = "bold", fig.lab.size = 14, fig.lab.pos = "top.left")
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/manuscript/figures/main\ figs/raw/Fig7S-SynTree.pdf", width=14, height=6)
+plot(zz)
+dev.off()
+```
+##  Ciliate Tree (Populations)
+Extract ASVs (kept top 31). Need to build reference tree too!
+```{r}
+mergedGP <- subset_taxa(psf_euk_coral_Tmin, Division=="Ciliophora")
+#f1<- filterfun_sample(topf(0.50)) # keep ASV reads only if they are in the most abundant 50% of Dinos in at least 1 of the samples in dataset
+#wh1 <- genefilter_sample(mergedGP, f1, A=2)
+#mergedGP2 <- prune_taxa(wh1, mergedGP)
+df <- data.frame(mergedGP@tax_table)
+
+write.csv(rownames(df), "/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Ciliates/Ciliates_ASVs.csv")
+# Correct Sheet so that only ASVs are listed
+"/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Ciliates/Ciliates_ASVs.txt"
+```
+```{r}
+mergedGP <- subset_taxa(psf_euk_coral_Tmin, Division=="Dinoflagellata")
+f1<- filterfun_sample(topf(0.50)) # keep DINO ASV reads only if they are in the most abundant 50% of Dinos in at least 1 of the samples in dataset
+wh1 <- genefilter_sample(mergedGP, f1, A=2)
+mergedGP2 <- prune_taxa(wh1, mergedGP)
+df <- data.frame(mergedGP2@tax_table)
+
+write.csv(rownames(df), "/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino_ASVs.csv")
+# Correct Sheet so that only ASVs are listed
+"/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino/Dino_ASVs.txt"
+```
+```{bash}
+cd /Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Ciliates/
+
+mafft --auto pcla_Ciliates_ASVs.fa > pcla_Ciliates_ASVs.aligned.fa
+
+raxmlHPC-PTHREADS -T 4 -m GTRCAT -p 31415 -x 20398 -d -f a -N 1000 -n pcla_Ciliates_ASVs -s pcla_Ciliates_ASVs.aligned.fa
+
+sed 's/QUERY___//g' RAxML_bestTree.pcla_Ciliates_ASVs | sed 's/\[I[0-9]*\]//g' > pcla_Ciliates_ASVs.tre
+```
+```{bash}
+cat /Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/ASVs_taxonomy-curated-FINAL_2.txt | grep -w -A 1 -f Ciliates_ASVs.txt |  grep -v -- "^--$" >  > pcla_Ciliates_ASVs_names.txt 
+
+# Take out bad info a relabel for tree
+```
+```{r}
+mergedGP <- noport %>% merge_samples("population")
+ASVs <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Ciliates/Ciliates_ASVs.txt", header=FALSE)
+ASVs  <- ASVs  %>% pull(V1)
+my_subset <- subset(t(mergedGP@otu_table@.Data), rownames(t(mergedGP@otu_table@.Data)) %in% ASVs)
+my_subset1 <- phyloseq(otu_table(my_subset, taxa_are_rows=TRUE))
+mergedGP <- merge_phyloseq(my_subset1, mergedGP@tax_table, mergedGP@sam_data)
+mergedGP <- mergedGP %>%  transform_sample_counts(function(x) {x/sum(x)*100} )
+tr <- read.tree("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Ciliates/pcla_Ciliates_ASVs.tre")
+#Made TXT with annotated names plus all the ASVS
+new_tips <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Ciliates/pcla_Ciliates_ASVs_names.txt", header = TRUE)
+tr <- sub.taxa.label(tr, new_tips)
+tr<- root(tr, outgroup ="ASV_126_Endogenida_2_X_sp.")
+tr <- drop.tip(tr, "ASV_126_Endogenida_2_X_sp.", trim.internal = TRUE)
+
+spec <- tax_table(mergedGP) %>% data.frame(stringsAsFactors = FALSE) %>% tibble::rownames_to_column("otu")
+p <- ggtree(tr, branch.length = "y", scale=0.09) %<+% spec 
+
+#p +geom_text(aes(label=node))
+#flip node 74
+#p <- flip(p, 40, 37)
+
+gd <- p$data
+melt_data<- psmelt(mergedGP)
+
+melt_data[] <- lapply(melt_data, function(x) {
+   inds <- match(x, new_tips$tip)
+   ifelse(is.na(inds),x, new_tips$new_name[inds]) 
+})
+
+tt <- melt_data %>% left_join(select(gd,OTU=label,x,y),by="OTU") %>%
+  arrange(factor(Sample, levels=ordered)) %>%  mutate(sample2=factor(Sample,levels=unique(Sample)),
+  col=as.numeric(sample2),x.col=scales::rescale(col,to=c(1.60,2.2)))
+#g <- p + geom_tiplab(size = 2, align=TRUE, linesize=.25)  + geom_treescale(x=0.05, y=0, offset=0.2, fontsize = 2.5)  +
+#  geom_tile(data=tt,aes(x=x.col,y=y,fill=factor(Sample, levels = coral_order),alpha=Abundance)) + 
+#  theme(legend.position="right", plot.title = element_text(size = 15, face = "bold", hjust = 0.5), legend.title=element_text(size=10, face="bold"), legend.text=element_text(size=8))  + ggtitle("Apicomplexa ASVs between Cnidarian Families") +
+#  scale_alpha_continuous(limits=c(0.001,100),na.value=0, range = c(0.25, 1)) + scale_fill_manual(values=c25) +scale_colour_viridis_d(option="magma") +
+#  labs(fill="Cnidarian Family", alpha= "Relative Abundance") +
+#  theme(panel.grid.major.y=element_line(), panel.grid.minor.y=element_line())
+#g
+
+
+##Changing heatmap
+g <- p + geom_tiplab(size = 4, align=TRUE, linesize=.20, hjust="right", offset=0.58, linetype=NA)  + geom_treescale(x=0.05, y=0, offset=0.2, fontsize = 2.5)  +
+  geom_tile(data=tt,aes(x=x.col,y=y,fill=Abundance)) + 
+  theme(legend.position="right", plot.title = element_text(size = 15, face = "bold", hjust = 0.5), legend.title=element_text(size=10, face="bold"), legend.text=element_text(size=8)) +
+  labs(fill="Relative Abundance") + scale_fill_gradient2(low="transparent", high = "#3182bd", mid= "#deebf7",midpoint= 5,limits=c(0.0001, 100), na.value="transparent") +
+  scale_y_continuous(minor_breaks = seq(1 , 52, 1), breaks = seq(1, 52, 1), expand = c(0, 0.8)) +  scale_x_continuous(minor_breaks = seq(1.6,2.2, 0.06), breaks = seq(1.6,2.2, 0.06)) +
+  theme(panel.grid.major.x=element_line(size = (0.2), colour="lightgrey"), panel.grid.minor.x=element_line(size = (0.2), colour="grey"), axis.title.y = element_blank())
+g
+g$data
+## Combine again at OTU the use this reads plot.
+#Bar Plot
+mergedGP2 <- noport %>% merge_samples("time")
+
+my_subsett <- subset(t(mergedGP2@otu_table@.Data), rownames(t(mergedGP2@otu_table@.Data)) %in% ASVs)
+my_subsett1 <- phyloseq(otu_table(my_subsett, taxa_are_rows=TRUE))
+mergedGP2 <- merge_phyloseq(my_subsett1, mergedGP2@tax_table, mergedGP2@sam_data)
+
+glom <- mergedGP2  %>%  transform_sample_counts(function(x) {x/sum(x)*100} )
+glom # should list # taxa as # phyla
+data <- psmelt(glom) 
+
+data[] <- lapply(data, function(x) {
+   inds <- match(x, new_tips$tip)
+   ifelse(is.na(inds),x, new_tips$new_name[inds]) 
+})
+
+
+# create dataframe from phyloseq object
+#data$Order <- as.character(data$Order) #convert to character
+ttt <- g$data
+ttt <- ttt[with(ttt, order(+y)), ]
+target <- as.vector(ttt$label)
+tttt <- ttt[!duplicated(ttt["label"]), ]
+names(tttt)[names(tttt) == "label"] <- "OTU"
+data2 <- merge(data, tttt, by='OTU')
+data3 <- data2[data2$Abundance != "NaN", ] 
+# Add Accession names to Data3
+as <- ttt[!grepl("0.", ttt$label),]
+as <- as[!is.na(as$label), ]
+ass <- as.vector(as$label)
+data4 <- data3
+library(gdata)
+
+data4 <- data4[order(match(data4$OTU, target)), , drop = FALSE]
+# Add Sample count per OTU
+mergedGP2
+## This object has all the info. I want to extract OTU Table. Then Count how many columns have a number greater than 0. I will export thi snumber and graph it.
+df <- noport@otu_table@.Data
+df <- data.frame(df)
+df$sample_count <- apply(df[, grep("", names(df))], MARGIN = 1, 
+                function(x) sum(x > 0, na.rm = T))
+df$sample_total <- apply(df[, grep("", names(df))], MARGIN = 1, 
+                function(x) sum(x >= 0, na.rm = T))
+df$sample_percent <- df$sample_count / df$sample_total *100
+
+
+row.names(df) <- lapply(row.names(df), function(x) {
+   inds <- match(x, new_tips$tip)
+   ifelse(is.na(inds),x, new_tips$new_name[inds]) 
+})
+
+df2 <- subset(df, row.names(df) %in% target)
+
+
+df2 <- df2[order(match(rownames(df2), target)), , drop = FALSE]
+
+#Match Samples then add zeroes for not listed
+samples <- as.vector(df2$sample_percent)
+data4$sample_percent=samples
+library(reshape2)
+
+b <- ggplot(data=data4, aes(x=y, y=Abundance, na.rm = TRUE)) + theme_classic() + geom_bar(stat="identity", fill = "#55C667FF") + coord_flip() +
+      theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.text.x= element_text(size=4), axis.title.x= element_text(size=9)) + scale_y_continuous(expand = c(0, 0), na.value=0, position = "right", breaks=c(0, 25, 50)) + guides(fill=guide_legend(title="Value")) + ylab("Abundance %") +
+  scale_x_continuous(expand = c(0.00, 0), na.value=0, limits=c(-1, 21.5))
+
+b
+c <- ggplot(data=data4, aes(x=y, y=sample_percent, na.rm = TRUE)) + theme_classic() + geom_bar(stat="identity", fill = "#482677FF") + coord_flip() +
+      theme(axis.title.y = element_blank(), axis.text.y = element_blank(), axis.text.x= element_text(size=4), axis.title.x= element_text(size=9)) + scale_y_continuous(expand = c(0, 0), na.value=0, position = "right", breaks=c(0,25, 50, 75)) + guides(fill=guide_legend(title="Value")) + ylab("Sample %") +
+  scale_x_continuous(expand = c(0.00, 0), na.value=0, limits=c(-1, 21.5))
+c
+
+a<- ggarrange(b, c, ncol=2, nrow=1, align = "h", common.legend = TRUE, legend="right") 
+
+z <- ggarrange(g, a, ncol=2, nrow=1, widths = c(1.1,.25), align = "v", common.legend = TRUE, legend="right") 
+z
+
+zz <- annotate_figure(z, fig.lab = "Heatmap of Ciliate ASVs across Sampling Locations", fig.lab.face = "bold", fig.lab.size = 14, fig.lab.pos = "top.left")
+
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/manuscript/figures/main\ figs/raw/Fig8S-CilTree.pdf", width=14, height=6)
+plot(zz)
+dev.off()
+```
+
+##  Big tree of Microeukaroytic Clade Thermotolerances
+```{r}
+noport <- subset_samples(psf_euk_coral_Tmin, psf_euk_coral_Tmin@sam_data$region!="Portugal")
+mergedGP <- noport %>% merge_samples("resitance_14_21")
+ASVs <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/combined_asvs.txt", header=FALSE)
+ASVs  <- ASVs  %>% pull(V1)
+my_subset <- subset(t(mergedGP@otu_table@.Data), rownames(t(mergedGP@otu_table@.Data)) %in% ASVs)
+my_subset1 <- phyloseq(otu_table(my_subset, taxa_are_rows=TRUE))
+mergedGP <- merge_phyloseq(my_subset1, mergedGP@tax_table, mergedGP@sam_data)
+mergedGP <- mergedGP %>%  transform_sample_counts(function(x) {x/sum(x)*100} )
+tr <- read.tree("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Ciliates/pcla_Ciliates_ASVs.tre")
+#Made TXT with annotated names plus all the ASVS
+new_tips <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Ciliates/pcla_Ciliates_ASVs_names.txt", header = TRUE)
+tr <- sub.taxa.label(tr, new_tips)
+tr<- root(tr, outgroup ="ASV_126_Endogenida_2_X_sp.")
+tr <- drop.tip(tr, "ASV_126_Endogenida_2_X_sp.", trim.internal = TRUE)
+
+spec <- tax_table(mergedGP) %>% data.frame(stringsAsFactors = FALSE) %>% tibble::rownames_to_column("otu")
+p <- ggtree(tr, branch.length = "y", scale=0.09) %<+% spec 
+
+gd <- p$data
+melt_data<- psmelt(mergedGP)
+ordered<- c("Hypersensible", "Sensible", "Tolerant","Resistant", "Superresistant")
+
+
+melt_data[] <- lapply(melt_data, function(x) {
+   inds <- match(x, new_tips$tip)
+   ifelse(is.na(inds),x, new_tips$new_name[inds]) 
+})
+
+tt <- melt_data %>% left_join(select(gd,OTU=label,x,y),by="OTU") %>%
+  arrange(factor(Sample, levels=ordered)) %>%  mutate(sample2=factor(Sample,levels=unique(Sample)),
+  col=as.numeric(sample2),x.col=scales::rescale(col,to=c(1.60,2.2)))
+
+cil <- p + geom_tiplab(size = 2, align=TRUE, linesize=.20, hjust="right", offset=0.50, linetype=NA)  + geom_treescale(x=0.05, y=0, offset=0.2, fontsize = 2.5)  +
+  geom_tile(data=tt,aes(x=x.col,y=y,fill=Abundance)) + 
+  theme(legend.position="right", plot.title = element_text(size = 15, face = "bold", hjust = 0.5), legend.title=element_text(size=10, face="bold"), legend.text=element_text(size=8)) +
+  labs(fill="Relative Abundance") + scale_fill_gradient2(low="transparent", high = "#3182bd", mid= "#deebf7",midpoint= .5,limits=c(0.0001, 100), na.value="transparent") +
+  scale_y_continuous(minor_breaks = seq(1 , 52, 1), breaks = seq(1, 52, 1), expand = c(0.013, 1)) +  scale_x_continuous(minor_breaks = seq(1.6,2.2, 0.15), breaks = seq(1.6,2.2, 0.15)) +
+  theme(panel.grid.major.x=element_line(size = (0.2), colour="lightgrey"), panel.grid.minor.x=element_line(size = (0.2), colour="grey"), axis.title.y = element_blank())
+cil
+noport <- subset_samples(psf_euk_coral_Tmin, psf_euk_coral_Tmin@sam_data$region!="Portugal")
+mergedGP <- noport %>% merge_samples("resitance_14_21")
+ASVs <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/combined_asvs.txt", header=FALSE)
+ASVs  <- ASVs  %>% pull(V1)
+my_subset <- subset(t(mergedGP@otu_table@.Data), rownames(t(mergedGP@otu_table@.Data)) %in% ASVs)
+my_subset1 <- phyloseq(otu_table(my_subset, taxa_are_rows=TRUE))
+mergedGP <- merge_phyloseq(my_subset1, mergedGP@tax_table, mergedGP@sam_data)
+mergedGP <- mergedGP %>%  transform_sample_counts(function(x) {x/sum(x)*100} )
+tr <- read.tree("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino/pcla_Dinos_ASVs.tre")
+#Made TXT with annotated names plus all the ASVS
+new_tips <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Dino/pcla_Dino_ASVs_names.txt", header = TRUE)
+tr <- sub.taxa.label(tr, new_tips)
+#tr <- drop.tip(tr, c("KT806396_Outgroup", "KT806398_Outgroup", "GU825688_Outgroup"), trim.internal = TRUE)
+tr<- root(tr, node =37)
+
+spec <- tax_table(mergedGP) %>% data.frame(stringsAsFactors = FALSE) %>% tibble::rownames_to_column("otu")
+p <- ggtree(tr, branch.length = "y", scale=0.09) %<+% spec 
+
+#flip node 74
+p <- flip(p, 40, 37)
+#p +geom_text(aes(label=node))
+gd <- p$data
+melt_data<- psmelt(mergedGP)
+
+melt_data[] <- lapply(melt_data, function(x) {
+   inds <- match(x, new_tips$tip)
+   ifelse(is.na(inds),x, new_tips$new_name[inds]) 
+})
+
+tt <- melt_data %>% left_join(select(gd,OTU=label,x,y),by="OTU") %>%
+  arrange(factor(Sample, levels=ordered)) %>%  mutate(sample2=factor(Sample,levels=unique(Sample)),
+  col=as.numeric(sample2),x.col=scales::rescale(col,to=c(1.6,2.2)))
+
+otdinos <- p + geom_tiplab(size = 2, align=TRUE, linesize=.20, hjust="right", offset=1.10, linetype=NA)  + geom_treescale(x=0.05, y=0, offset=0.2, fontsize = 2.5)  +
+  geom_tile(data=tt,aes(x=x.col,y=y,fill=Abundance)) + 
+  theme(legend.position="right", plot.title = element_text(size = 15, face = "bold", hjust = 0.5), legend.title=element_text(size=10, face="bold"), legend.text=element_text(size=8)) +
+  labs(fill="Relative Abundance") + scale_fill_gradient2(low="transparent", high = "#3182bd", mid= "#deebf7",midpoint= .5,limits=c(0.0001, 100), na.value="transparent") +
+  scale_y_continuous(minor_breaks = seq(1 , 52, 1), breaks = seq(1, 52, 1), expand = c(0.013, 1)) +  scale_x_continuous(minor_breaks = seq(1.6,2.2, 0.15), breaks = seq(1.6,2.2, 0.15)) +
+  theme(panel.grid.major.x=element_line(size = (0.2), colour="lightgrey"), panel.grid.minor.x=element_line(size = (0.2), colour="grey"), axis.title.y = element_blank())
+otdinos
+
+noport <- subset_samples(psf_euk_coral_Tmin, psf_euk_coral_Tmin@sam_data$region!="Portugal")
+mergedGP <- noport %>% merge_samples("resitance_14_21")
+ASVs <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/combined_asvs.txt", header=FALSE)
+ASVs  <- ASVs  %>% pull(V1)
+my_subset <- subset(t(mergedGP@otu_table@.Data), rownames(t(mergedGP@otu_table@.Data)) %in% ASVs)
+my_subset1 <- phyloseq(otu_table(my_subset, taxa_are_rows=TRUE))
+mergedGP <- merge_phyloseq(my_subset1, mergedGP@tax_table, mergedGP@sam_data)
+mergedGP <- mergedGP %>%  transform_sample_counts(function(x) {x/sum(x)*100} )
+tr <- read.tree("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Api/RAxML_placement_tree_pcla_Api.tre")
+#Made TXT with annotated names plus all the ASVS
+new_tips <- read.delim("/Volumes/projects/bonacolta/pcla/paramuricea_eukaryome/new/analysis/trees/Api/tree_anno.txt", header = TRUE)
+tr <- sub.taxa.label(tr, new_tips)
+tr <- drop.tip(tr, c("KT806396_Outgroup", "KT806398_Outgroup", "GU825688_Outgroup", NA), trim.internal = TRUE)
+tr<- root(tr, outgroup ="KF579890_Corallicolidae_COR6_sp.")
+
+spec <- tax_table(mergedGP) %>% data.frame(stringsAsFactors = FALSE) %>% tibble::rownames_to_column("otu")
+p <- ggtree(tr, branch.length = "y", scale=0.09) %<+% spec 
+
+#flip node 74
+#p <- flip(p, 76, 75)
+
+gd <- p$data
+melt_data<- psmelt(mergedGP)
+ordered<- c("Balun", "Mana","Altare","Indiano","Lighthouse","Gargallu","Palazzinu","Palazzu","La Vaca","Pota de Llop", "Tascons","Sagres")
+
+tt <- melt_data %>% left_join(select(gd,OTU=label,x,y),by="OTU") %>%
+  arrange(factor(Sample, levels=ordered)) %>%  mutate(sample2=factor(Sample,levels=unique(Sample)),
+  col=as.numeric(sample2),x.col=scales::rescale(col,to=c(1.6,2.2)))
+
+apires <- p + geom_tiplab(size = 2, align=TRUE, linesize=.20, hjust="right", offset=1.4, linetype=NA)  + geom_treescale(x=0.05, y=0, offset=0.2, fontsize = 2.5)  +
+  geom_tile(data=tt,aes(x=x.col,y=y,fill=Abundance)) + 
+  theme(legend.position="right", plot.title = element_text(size = 15, face = "bold", hjust = 0.5), legend.title=element_text(size=10, face="bold"), legend.text=element_text(size=8)) +
+  labs(fill="Relative Abundance") + scale_fill_gradient2(low="transparent", high = "#3182bd", mid= "#deebf7",midpoint= .5,limits=c(0.0001, 100), na.value="transparent") +
+  scale_y_continuous(minor_breaks = seq(1 , 52, 1), breaks = seq(1, 52, 1), expand = c(0.013, 1)) +  scale_x_continuous(minor_breaks = seq(1.6,2.2, 0.15), breaks = seq(1.6,2.2, 0.15)) +
+  theme(panel.grid.major.x=element_line(size = (0.2), colour="lightgrey"), panel.grid.minor.x=element_line(size = (0.2), colour="grey"), axis.title.y = element_blank())
+apires
+
+glob <- ggarrange(cil, otdinos, apires, ncol=1, nrow=3, align="v", common.legend = TRUE, legend="right")
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/manuscript/figures/Fig9S-TreeRes.pdf", width=8, height=10)
+plot(glob)
+dev.off()
+```
+
+
+##  Aitchison PCA of Eukaryome by Resistance & Population
+```{r}
+noport <- subset_samples(psf_euk_coral_Tmin, psf_euk_coral_Tmin@sam_data$region!="Portugal")
+noport_bac <- subset_samples(psf_bac_coral_Tmin, psf_bac_coral_Tmin@sam_data$region!="Portugal")
+ps_clr <- microbiome::transform(noport, 'clr', shift = 1)
+psr_clr.ord <- ordinate(ps_clr, "RDA", "euclidean")
+PCA = plot_ordination(ps_clr, psr_clr.ord,
+                                color ="resitance_14_21",
+                                shape = "region",
+                                title="Aitchison Distance PCA of Eukaryome") + theme_classic() + geom_point(aes(color = resitance_14_21), alpha = 1, size = 3) + scale_colour_manual(values=c25) + labs(color="Resistance") + stat_ellipse()
+
+PCA
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/paramuricea_microbiome/Figures/Manuscript/PCA_1.pdf",  width=10, height=6.5)
+plot(PCA)
+dev.off()
+```
+
+
+```{r}
+noport <- subset_samples(psf_euk_coral_Tmin, psf_euk_coral_Tmin@sam_data$region!="Portugal")
+noport_bac <- subset_samples(psf_bac_coral_Tmin, psf_bac_coral_Tmin@sam_data$region!="Portugal")
+ps_clr <- microbiome::transform(noport_bac, 'clr', shift = 1)
+psr_clr.ord <- ordinate(ps_clr, "RDA", "euclidean")
+PCA = plot_ordination(ps_clr, psr_clr.ord,
+                                color ="resitance_14_21",
+                                shape = "region",
+                                title="Aitchison Distance PCA of Prokaryome") + theme_classic() + geom_point(aes(color = resitance_14_21), alpha = 1, size = 3) + scale_colour_manual(values=c25) + labs(color="Resistance") + stat_ellipse()
+
+PCA
+```
+
+
+## LEFSE
+```{r}
+library(microbiomeMarker)
+mm_lefse <- run_lefse(ps_clr, group = "resitance_14_21", subgroup = NULL, taxa_rank = "all", norm="none")
+mm_lefse
+lefse_mm <- as.data.frame(mm_lefse@marker_table)
+
+write.csv(lefse_mm, "/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/paramuricea_microbiome/Figures/Manuscript/Stats/Euk_resistance_markers_LEFSE.csv")
+
+
+
+
+noport_bac <- subset_samples(psf_bac_coral_Tmin, psf_bac_coral_Tmin@sam_data$region!="Portugal")
+ps_clr <- microbiome::transform(noport_bac, 'clr', shift = 1)
+mm_lefse <- run_lefse(ps_clr, group = "resitance_14_21", subgroup = NULL, taxa_rank = "all", norm="none")
+mm_lefse
+lefse_mm <- as.data.frame(mm_lefse@marker_table)
+
+write.csv(lefse_mm, "/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/paramuricea_microbiome/Figures/Manuscript/Stats/Bac_resistance_markers_LEFSE.csv")
+```
+
+# Obligatory Water Sample
+```{r}
+psf_bac_nofood <- subset_samples(psf_bac, psf_bac@sam_data$type!='food')
+mergedGP = merge_samples(psf_bac_nofood, "type")
+
+type_taxa <- mergedGP %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)} ) %>% 
+  psmelt() %>% 
+  arrange(Order) 
+
+# create dataframe from phyloseq object
+dat <- data.table(type_taxa)
+# convert Class to a character vector from a factor because R
+dat$Order <- as.character(dat$Order)
+# group dataframe by Class, calculate median rel. abundance
+dat[, median := median(Abundance, na.rm = FALSE), 
+    by = "Order"]
+# Change name to remainder of Phylum less than 2%
+dat[(median <= 0.01), Order := "Below Threshold"]
+dat[(median <= 0.10), Phylum := "Other"]
+
+water_bac <- ggplot(dat, aes(x = Sample, y = Abundance, fill = Order)) + 
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values=c25) +
+  guides(fill = guide_legend(reverse = TRUE, keywidth = 1, keyheight = 1)) +
+  ylab("Relative Abundance \n") +
+  ggtitle("Prokaryotic Order Composition By Sample Type") + scale_y_continuous(limits = c(0,1), expand = c(0,0)) + theme_classic()
+
+
+##Euks 
+psf_euk_nofood <- subset_samples(psf_euk, psf_euk@sam_data$type!='food')
+mergedGP1 = merge_samples(psf_euk_nofood, "type")
+
+type_taxa1 <- mergedGP1 %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)} ) %>% 
+  psmelt() %>% 
+  arrange(Order) 
+
+# create dataframe from phyloseq object
+dat1 <- data.table(type_taxa1)
+# convert Class to a character vector from a factor because R
+dat1$Order <- as.character(dat1$Order)
+# group dataframe by Class, calculate median rel. abundance
+dat1[, median := median(Abundance, na.rm = FALSE), 
+    by = "Order"]
+# Change name to remainder of Phylum less than 2%
+dat1[(median <= 0.01), Order := "Below Threshold"]
+dat1[(median <= 0.10), Division := "Other"]
+
+water_euk <- ggplot(dat1, aes(x = Sample, y = Abundance, fill = Order)) + 
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values=palette) +
+  guides(fill = guide_legend(reverse = TRUE, keywidth = 1, keyheight = 1)) +
+  ylab("Relative Abundance \n") +
+  ggtitle("Eukaryotic Order Composition By Sample Type") + scale_y_continuous(limits = c(0,1), expand = c(0,0)) + theme_classic()
+
+
+
+library("ggpubr")
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1NZWDX6hj2iMLlcMpeA9ILkNyhxyngfoM/Bonacolta\ et\ al.\ 2020\ Paramuricea/manuscript/figures/main\ figs/raw/Fig1S-Water.pdf", width=9, height=9)
+ggarrange(water_bac,water_euk,align = "v",  nrow=2, common.legend = FALSE, legend="right")
+dev.off()
+```
+
+
+```{r}
+library(ANCOMBC)
+library(tidyverse)
+library(caret)
+library(DT)
+noport <- subset_samples(psf_euk_coral_Tmin, psf_euk_coral_Tmin@sam_data$region!="Portugal")
+sample_data(noport)$resitance_14_21 = recode(sample_data(noport)$resitance_14_21,
+                                  "Hyper Sensitive" = "Sensitive",
+                                  "Sensitive" = "Sensitive",
+                                  "Tolerant" = "Tolerant",
+                                  "Resistant" = "Resistant",
+                                  "Super Resistant" = "Resistant")
+
+noport_combined <- subset_samples(noport, noport@sam_data$resitance_14_21=='Resistant' | noport@sam_data$resitance_14_21=="Sensitive")
+noport_combined@sam_data$resitance_14_21
+
+
+output_combined = ancombc2(data = noport_combined, assay_name = "counts", tax_level = "Order",
+                  fix_formula = "resitance_14_21 + region", rand_formula = NULL,
+                  p_adj_method = "fdr", pseudo = 0, pseudo_sens = TRUE,
+                  prv_cut = 0.01, lib_cut = 0, s0_perc = 0.05,
+                  group = "resitance_14_21", struc_zero = TRUE, neg_lb = FALSE,
+                  alpha = 0.05, n_cl = 2, verbose = TRUE,
+                  global = TRUE, pairwise = TRUE, dunnet = TRUE, trend = TRUE,
+                  iter_control = list(tol = 1e-2, max_iter = 20, 
+                                      verbose = TRUE),
+                  em_control = list(tol = 1e-5, max_iter = 100),
+                  lme_control = lme4::lmerControl(),
+                  mdfdr_control = list(fwer_ctrl_method = "fdr", B = 100),
+                  trend_control = list(contrast = list(matrix(c(1, 0, -1, 1),
+                                                              nrow = 2, 
+                                                              byrow = TRUE),
+                                                       matrix(c(-1, 0, 1, -1),
+                                                              nrow = 2, 
+                                                              byrow = TRUE)),
+                                       node = list(2, 2),
+                                       solver = "ECOS",
+                                       B = 100))
+
+res_prim = output_combined$res
+res_prim
+df_res = res_prim %>% dplyr::filter(diff_resitance_14_21Sensitive) %>%
+    dplyr::select(taxon, contains("resitance_14_21")) 
+
+df_res$taxon[df_res$taxon == "Bacillariophyta_X"] <- "Bacillariophyta IS"
+df_res$taxon[df_res$taxon == "Phaeophyceae_X"] <- "Phaeophyceae IS"
+
+df_fig_res = df_res %>% 
+    arrange(desc(lfc_resitance_14_21Sensitive
+)) %>%
+    mutate(direct = ifelse(lfc_resitance_14_21Sensitive
+ > 0, "Positive LFC", "Negative LFC"))
+
+
+df_fig_res$taxon = factor(df_fig_res$taxon, levels = df_fig_res$taxon)
+df_fig_res$direct = factor(df_fig_res$direct, 
+                           levels = c("Positive LFC", "Negative LFC"))
+  
+fig_res = df_fig_res %>%
+    ggplot(aes(x = taxon, y = lfc_resitance_14_21Sensitive, fill = lfc_resitance_14_21Sensitive)) + 
+    geom_bar(stat = "identity", width = 0.7, color = "black", 
+             position = position_dodge(width = 0.4)) +
+    geom_errorbar(aes(ymin = lfc_resitance_14_21Sensitive - se_resitance_14_21Sensitive, ymax = lfc_resitance_14_21Sensitive + se_resitance_14_21Sensitive), 
+                  width = 0.2, position = position_dodge(0.05), color = "black") + 
+    labs(x = "Eukaryotic Order", y = "Log fold change", 
+         title = "LFC in Sensitive (+ Hyper Sensitive) vs Resistant (+ Super Resistant) Corals", subtitle = "Of ANCOM-BC signficant taxa corrected by region of origin") + scale_fill_viridis_c(option = "plasma") + scale_color_viridis_c(option = "plasma") +
+  theme_bw() + 
+  theme(legend.position = "none",
+        panel.grid.minor.y = element_blank()) + coord_flip()
+
+fig_res
+
+write.csv(df_fig_res, "/Volumes/GoogleDrive/.shortcut-targets-by-id/1Uhk_e1I1cmFBqEeRdKf7D2rsPkFG5Gqk/Bonacolta\ et\ al.\ ISMEJ\ 2022/figures/microbiome_revision_figures/ANCOMBC2_euk_combined_data.csv")
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1Uhk_e1I1cmFBqEeRdKf7D2rsPkFG5Gqk/Bonacolta\ et\ al.\ ISMEJ\ 2022/figures/microbiome_revision_figures/ANCOMBC2_euk_combined.pdf",  width=8, height=4)
+plot(fig_res)
+dev.off()
+```
+
+
+```{r}
+library(ANCOMBC)
+library(tidyverse)
+library(caret)
+library(DT)
+noport_bac <- subset_samples(psf_bac_coral_Tmin, psf_bac_coral_Tmin@sam_data$region!="Portugal")
+sample_data(noport_bac)$resitance_14_21 = recode(sample_data(noport_bac)$resitance_14_21,
+                                  "Hyper Sensitive" = "Sensitive",
+                                  "Sensitive" = "Sensitive",
+                                  "Tolerant" = "Tolerant",
+                                  "Resistant" = "Resistant",
+                                  "Super Resistant" = "Resistant")
+
+noport_combined <- subset_samples(noport_bac, noport_bac@sam_data$resitance_14_21=='Resistant' | noport_bac@sam_data$resitance_14_21=="Sensitive")
+noport_combined@sam_data$resitance_14_21
+
+
+output_combined = ancombc2(data = noport_combined, assay_name = "counts", tax_level = "Order",
+                  fix_formula = "resitance_14_21 + region", rand_formula = NULL,
+                  p_adj_method = "fdr", pseudo = 0, pseudo_sens = TRUE,
+                  prv_cut = 0.01, lib_cut = 0, s0_perc = 0.05,
+                  group = "resitance_14_21", struc_zero = TRUE, neg_lb = FALSE,
+                  alpha = 0.05, n_cl = 2, verbose = TRUE,
+                  global = TRUE, pairwise = TRUE, dunnet = TRUE, trend = TRUE,
+                  iter_control = list(tol = 1e-2, max_iter = 20, 
+                                      verbose = TRUE),
+                  em_control = list(tol = 1e-5, max_iter = 100),
+                  lme_control = lme4::lmerControl(),
+                  mdfdr_control = list(fwer_ctrl_method = "fdr", B = 100),
+                  trend_control = list(contrast = list(matrix(c(1, 0, -1, 1),
+                                                              nrow = 2, 
+                                                              byrow = TRUE),
+                                                       matrix(c(-1, 0, 1, -1),
+                                                              nrow = 2, 
+                                                              byrow = TRUE)),
+                                       node = list(2, 2),
+                                       solver = "ECOS",
+                                       B = 100))
+
+res_prim = output_combined$res
+res_prim
+df_res = res_prim %>% dplyr::filter(diff_resitance_14_21Sensitive) %>%
+    dplyr::select(taxon, contains("resitance_14_21")) 
+
+#df_res$taxon[df_res$taxon == "Bacillariophyta_X"] <- "Bacillariophyta IS"
+#df_res$taxon[df_res$taxon == "Phaeophyceae_X"] <- "Phaeophyceae IS"
+
+df_fig_res = df_res %>% 
+    arrange(desc(lfc_resitance_14_21Sensitive
+)) %>%
+    mutate(direct = ifelse(lfc_resitance_14_21Sensitive
+ > 0, "Positive LFC", "Negative LFC"))
+
+
+df_fig_res$taxon = factor(df_fig_res$taxon, levels = df_fig_res$taxon)
+df_fig_res$direct = factor(df_fig_res$direct, 
+                           levels = c("Positive LFC", "Negative LFC"))
+  
+fig_res = df_fig_res %>%
+    ggplot(aes(x = taxon, y = lfc_resitance_14_21Sensitive, fill = lfc_resitance_14_21Sensitive)) + 
+    geom_bar(stat = "identity", width = 0.7, color = "black", 
+             position = position_dodge(width = 0.4)) +
+    geom_errorbar(aes(ymin = lfc_resitance_14_21Sensitive - se_resitance_14_21Sensitive, ymax = lfc_resitance_14_21Sensitive + se_resitance_14_21Sensitive), 
+                  width = 0.2, position = position_dodge(0.05), color = "black") + 
+    labs(x = "Prokaryotic Order", y = "Log fold change", 
+         title = "LFC in Sensitive (+ Hyper Sensitive) vs Resistant (+ Super Resistant) Corals", subtitle = "Of ANCOM-BC signficant taxa corrected by region of origin") + scale_fill_viridis_c(option = "plasma") + scale_color_viridis_c(option = "plasma") +
+  theme_bw() + 
+  theme(legend.position = "none",
+        panel.grid.minor.y = element_blank()) + coord_flip()
+
+fig_res
+
+write.csv(df_fig_res, "/Volumes/GoogleDrive/.shortcut-targets-by-id/1Uhk_e1I1cmFBqEeRdKf7D2rsPkFG5Gqk/Bonacolta\ et\ al.\ ISMEJ\ 2022/figures/microbiome_revision_figures/ANCOMBC2_bac_combined_data.csv")
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1Uhk_e1I1cmFBqEeRdKf7D2rsPkFG5Gqk/Bonacolta\ et\ al.\ ISMEJ\ 2022/figures/microbiome_revision_figures/ANCOMBC2_bac_combined.pdf",  width=8, height=4)
+plot(fig_res)
+dev.off()
+```
+
+```{r}
+library(ANCOMBC)
+library(tidyverse)
+library(caret)
+library(DT)
+noport_bac <- subset_samples(psf_bac_coral_Tmin, psf_bac_coral_Tmin@sam_data$region!="Portugal")
+sample_data(noport_bac)$resitance_14_21 = recode(sample_data(noport_bac)$resitance_14_21,
+                                  "Hyper Sensitive" = "Sensitive",
+                                  "Sensitive" = "Sensitive",
+                                  "Tolerant" = "Tolerant",
+                                  "Resistant" = "Resistant",
+                                  "Super Resistant" = "Resistant")
+
+noport_combined <- subset_samples(noport_bac, noport_bac@sam_data$resitance_14_21=='Resistant' | noport_bac@sam_data$resitance_14_21=="Sensitive")
+noport_combined@sam_data$resitance_14_21
+
+
+output_combined = ancombc2(data = noport_combined, assay_name = "counts", tax_level = "Order",
+                  fix_formula = "resitance_14_21 + region", rand_formula = NULL,
+                  p_adj_method = "fdr", pseudo = 0, pseudo_sens = TRUE,
+                  prv_cut = 0.01, lib_cut = 0, s0_perc = 0.05,
+                  group = "resitance_14_21", struc_zero = TRUE, neg_lb = FALSE,
+                  alpha = 0.05, n_cl = 2, verbose = TRUE,
+                  global = TRUE, pairwise = TRUE, dunnet = TRUE, trend = TRUE,
+                  iter_control = list(tol = 1e-2, max_iter = 20, 
+                                      verbose = TRUE),
+                  em_control = list(tol = 1e-5, max_iter = 100),
+                  lme_control = lme4::lmerControl(),
+                  mdfdr_control = list(fwer_ctrl_method = "fdr", B = 100),
+                  trend_control = list(contrast = list(matrix(c(1, 0, -1, 1),
+                                                              nrow = 2, 
+                                                              byrow = TRUE),
+                                                       matrix(c(-1, 0, 1, -1),
+                                                              nrow = 2, 
+                                                              byrow = TRUE)),
+                                       node = list(2, 2),
+                                       solver = "ECOS",
+                                       B = 100))
+
+res_prim = output_combined$res
+res_prim
+df_res = res_prim %>% dplyr::filter(diff_resitance_14_21Sensitive) %>%
+    dplyr::select(taxon, contains("resitance_14_21")) 
+
+#df_res$taxon[df_res$taxon == "Bacillariophyta_X"] <- "Bacillariophyta IS"
+#df_res$taxon[df_res$taxon == "Phaeophyceae_X"] <- "Phaeophyceae IS"
+
+df_fig_res = df_res %>% 
+    arrange(desc(lfc_resitance_14_21Sensitive
+)) %>%
+    mutate(direct = ifelse(lfc_resitance_14_21Sensitive
+ > 0, "Positive LFC", "Negative LFC"))
+
+
+df_fig_res$taxon = factor(df_fig_res$taxon, levels = df_fig_res$taxon)
+df_fig_res$direct = factor(df_fig_res$direct, 
+                           levels = c("Positive LFC", "Negative LFC"))
+  
+fig_res = df_fig_res %>%
+    ggplot(aes(x = taxon, y = lfc_resitance_14_21Sensitive, fill = lfc_resitance_14_21Sensitive)) + 
+    geom_bar(stat = "identity", width = 0.7, color = "black", 
+             position = position_dodge(width = 0.4)) +
+    geom_errorbar(aes(ymin = lfc_resitance_14_21Sensitive - se_resitance_14_21Sensitive, ymax = lfc_resitance_14_21Sensitive + se_resitance_14_21Sensitive), 
+                  width = 0.2, position = position_dodge(0.05), color = "black") + 
+    labs(x = "Prokaryotic Order", y = "Log fold change", 
+         title = "LFC in Sensitive (+ Hyper Sensitive) vs Resistant (+ Super Resistant) Corals", subtitle = "Of ANCOM-BC signficant taxa corrected by region of origin") + scale_fill_viridis_c(option = "plasma") + scale_color_viridis_c(option = "plasma") +
+  theme_bw() + 
+  theme(legend.position = "none",
+        panel.grid.minor.y = element_blank()) + coord_flip()
+
+fig_res
+
+write.csv(df_fig_res, "/Volumes/GoogleDrive/.shortcut-targets-by-id/1Uhk_e1I1cmFBqEeRdKf7D2rsPkFG5Gqk/Bonacolta\ et\ al.\ ISMEJ\ 2022/figures/microbiome_revision_figures/ANCOMBC2_bac_combined_data.csv")
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1Uhk_e1I1cmFBqEeRdKf7D2rsPkFG5Gqk/Bonacolta\ et\ al.\ ISMEJ\ 2022/figures/microbiome_revision_figures/ANCOMBC2_bac_combined.pdf",  width=8, height=4)
+plot(fig_res)
+dev.off()
+```
+
+## NEW Figure 2. Bubble Plot of Thermal Tolerances with SD
+```{r}
+sd1 <- noport %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)*100} ) %>% 
+  psmelt() %>% group_by(OTU, resitance_14_21)  %>%
+  summarize(sd = sd(Abundance, na.rm=FALSE)) %>% arrange(OTU)
+
+
+bub <- merge_samples(noport, "resitance_14_21") 
+type_taxa <- bub %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)*100} ) 
+
+type_taxa <- type_taxa %>% 
+  psmelt() %>% 
+  arrange(OTU)
+
+
+library(data.table)
+# create dataframe from phyloseq object
+dat <- data.table(type_taxa)
+
+dat$SD <- sd1$sd
+# convert Phylum to a character vector from a factor because R
+dat$Order <- as.character(dat$Order)
+# group dataframe by Phylum, calculate median rel. abundance
+dat[, median := median(Abundance, na.rm = FALSE), 
+    by = "Order"]
+
+# Change name to remainder of Phylum less than 2%
+dat[(median <= 0.01), Order := "Below Threshold"]
+dat[(Order == "Below Threshold"), Division := "Other"]
+
+dat$Order[dat$Order == "Eukaryota_NA"] <- "Eukaryota IS"
+dat$Order[dat$Order == "Dinophyceae_NA"] <- "Dinophyceae IS"
+dat$Order[dat$Order == "Dinophyceae_X"] <- "Dinophyceae IS"
+dat$Order[dat$Order == "Apicomplexa_NA"] <- "Apicomplexa IS"
+dat$Order[dat$Order == "Apicomplexa_X"] <- "Apicomplexa IS"
+dat$Order[dat$Order == "Alveolata_NA"] <- "Alveolata IS"
+dat$Order[dat$Order == "Bacillariophyta_X"] <- "Bacillariophyta IS"
+dat$Order[dat$Order == "Syndiniales_X"] <- "Syndiniales IS"
+dat$Order[dat$Order == "Dinoflagellata_NA"] <- "Dinoflagellata IS"
+dat$Order[dat$Order == "Coccidiomorphea_X"] <- "Coccidiomorphea IS"
+dat$Order[dat$Order == "Phaeophyceae_X"] <- "Phaeophyceae IS"
+
+
+Fig2B <- ggplot(dat[Abundance > 0], aes(x = factor(Sample, levels=c("Hyper Sensitive", "Sensitive", "Tolerant","Resistant", "Super Resistant")), y = factor(Order, levels=euk_orders))) + geom_point(aes(size = Abundance, fill=Division, color=Division), alpha = 0.5, shape = 21) + 
+  scale_size_continuous(limits = c(0.000001, 100), range = c(0.1,10), breaks = c(1,10,50,75)) + 
+  labs( x= "Thermal Tolerance", y = "Eukaryotic Order", size = "Relative Abundance %", fill="Eukaryotic Division") + theme_bw() +  
+  scale_fill_manual(values = c25,breaks=c('Apicomplexa', 'Ciliophora', 'Dinoflagellata', 'Fungi', 'Haptophyta', 'Ochrophyta', 'Eukaryota IS', 'Other')) + 
+  scale_color_manual(values = c25,breaks=c('Apicomplexa', 'Ciliophora', 'Dinoflagellata', 'Fungi', 'Haptophyta', 'Ochrophyta', 'Eukaryota IS', 'Other')) +
+  theme(axis.text.x = element_text(angle = 40, hjust=1, face="bold"), legend.justification = "top") + geom_point(aes(size=Abundance-SD, fill = NULL, color=Division), alpha = 1, shape=21) +  geom_point(aes(size=Abundance+SD, fill = Division, color=Division), alpha = 0.2, shape=21) + guides(color = FALSE, size=FALSE, fill = guide_legend(override.aes = list(size = 3)))
+Fig2B
+
+sd2 <- noport_bac %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)*100} ) %>% 
+  psmelt() %>% group_by(OTU, resitance_14_21)  %>%
+  summarize(sd = sd(Abundance, na.rm=FALSE)) %>% arrange(OTU)
+
+bub1 <- merge_samples(noport_bac, "resitance_14_21") 
+type_taxa1 <- bub1 %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)*100} )  
+
+type_taxa1 <- type_taxa1 %>% 
+  psmelt() %>%
+  arrange(OTU)
+
+type_taxa1 <- type_taxa1 %>%
+    group_by(OTU, Sample) %>%
+    mutate(SD = sd(Abundance)) %>%
+    ungroup
+
+library(data.table)
+# create dataframe from phyloseq object
+dat1 <- data.table(type_taxa1)
+
+dat1$SD <- sd2$sd
+# convert Phylum to a character vector from a factor because R
+dat1$Order <- as.character(dat1$Order)
+# group dataframe by Phylum, calculate median rel. abundance
+dat1[, median := median(Abundance, na.rm = FALSE), 
+    by = "Order"]
+
+# Change name to remainder of Phylum less than 2%
+dat1[(median <= 0.01), Order := "Below Threshold"]
+dat1[(Order == "Below Threshold"), Phylum := "Other"]
+
+dat1$Order[dat1$Order == "Omnitrophia_NA"] <- "Omnitrophia IS"
+dat1$Order[dat1$Order == "Gammaproteobacteria_NA"] <- "Gammaproteobacteria IS"
+dat1$Order[dat1$Order == "Bacilli_NA"] <- "Bacilli IS"
+dat1$Order[dat1$Order == "Bacteria_NA"] <- "Bacteria IS"
+dat1$Order[dat1$Order == "Bacillariophyta_X"] <- "Bacillariophyta IS"
+dat1$Phylum[dat1$Phylum == "Bacteria_NA"] <- "Bacteria IS"
+dat1$Order[dat1$Order == "Alphaproteobacteria_NA"] <- "Alphaproteobacteria IS"
+
+my_title <- expression(paste("Microbial Orders within ", italic("P. clavata")))
+
+Fig2A <- ggplot(dat1[Abundance > 0], aes(x = factor(Sample, levels=c("Hyper Sensitive", "Sensitive", "Tolerant","Resistant", "Super Resistant")), y = factor(Order, levels=bac_orders))) + geom_point(aes(size = Abundance, fill=Phylum, color=Phylum), alpha = 0.5, shape = 21) +
+  scale_size_continuous(limits = c(0.000001, 100), range = c(0.1,10), breaks = c(1,10,50,75)) + 
+  labs( x= "Thermal Tolerance", y = "Prokaryotic Order", size = "Relative Abundance %", fill="Prokaryotic Phylum") + theme_bw() +  
+  scale_fill_manual(values = palette,breaks=c('Verrucomicrobiota', 'Proteobacteria', 'Firmicutes', 'Cyanobacteria', 'Bacteroidota', 'Bacteria IS', 'Other')) + 
+  scale_color_manual(values = palette,breaks=c('Verrucomicrobiota', 'Proteobacteria', 'Firmicutes', 'Cyanobacteria', 'Bacteroidota', 'Bacteria IS', 'Other')) + 
+  ggtitle(label=my_title, subtitle = "With median relative abundance above 1%") + geom_point(aes(size=Abundance+SD, fill = Phylum, color=Phylum), alpha = 0.20, shape=21) + geom_point(aes(size=Abundance-SD, fill = NULL, color=Phylum), alpha = 1, shape=21) + guides(color = FALSE, fill = guide_legend(override.aes = list(size = 3)))
+Fig2A
+
+library("ggpubr")
+Fig2A_x <- Fig2A + theme(axis.title.x = element_blank(),axis.text.x = element_blank())
+
+p <- ggarrange(Fig2A_x, Fig2B, nrow=2, heights=c(0.45,0.55), align="v", common.legend = FALSE, legend="right", labels = c("A", "B"))
+p
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1Uhk_e1I1cmFBqEeRdKf7D2rsPkFG5Gqk/Bonacolta\ et\ al.\ ISMEJ\ 2022/figures/microbiome_revision_figures/New_Fig2-Resistance.pdf", width=7, height=9)
+plot(p)
+dev.off()
+```
+
+## NEW Figure 2. Bubble Plot of Thermal Tolerances with SD
+```{r}
+sd1 <- psf_bac_coral_Tmin %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)*100} ) %>% 
+  psmelt() %>% group_by(OTU, population)  %>%
+  summarize(sd = sd(Abundance, na.rm=FALSE)) %>% arrange(OTU)
+
+bub1 <- merge_samples(psf_bac_coral_Tmin, "population") 
+type_taxa1 <- bub1 %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)*100} )  
+
+type_taxa1 <- type_taxa1 %>% 
+  psmelt() %>% 
+  arrange(OTU) 
+
+library(data.table)
+# create dataframe from phyloseq object
+dat1 <- data.table(type_taxa1)
+
+dat1$SD <- sd1$sd
+# convert Phylum to a character vector from a factor because R
+dat1$Order <- as.character(dat1$Order)
+# group dataframe by Phylum, calculate median rel. abundance
+dat1[, median := median(Abundance, na.rm = FALSE), 
+    by = "Order"]
+# Change name to remainder of Phylum less than 2%
+dat1[(median <= 0.01), Order := "Below Threshold"]
+dat1[(Order == "Below Threshold"), Phylum := "Other"]
+#dat1[(median <= 0.10), Phylum := "Other"]
+
+dat1$Order[dat1$Order == "Omnitrophia_NA"] <- "Omnitrophia IS"
+dat1$Order[dat1$Order == "Gammaproteobacteria_NA"] <- "Gammaproteobacteria IS"
+dat1$Order[dat1$Order == "Bacilli_NA"] <- "Bacilli IS"
+dat1$Order[dat1$Order == "Bacteria_NA"] <- "Bacteria IS"
+dat1$Order[dat1$Order == "Apicomplexa_X"] <- "Apicomplexa IS"
+dat1$Order[dat1$Order == "Alveolata_NA"] <- "Alveolata IS"
+dat1$Order[dat1$Order == "Bacillariophyta_X"] <- "Bacillariophyta IS"
+dat1$Order[dat1$Order == "Syndiniales_X"] <- "Syndiniales IS"
+dat1$Order[dat1$Order == "Dinoflagellata_NA"] <- "Dinoflagellata IS"
+dat1$Order[dat1$Order == "Coccidiomorphea_X"] <- "Coccidiomorphea IS"
+dat1$Phylum[dat1$Phylum == "Bacteria_NA"] <- "Bacteria IS"
+
+my_title1 <- expression(paste("Microbial Orders within ", italic("P. clavata")))
+
+Fig1A <- ggplot(dat1[Abundance > 0], aes(x = factor(Sample, levels=ordered), y = factor(Order, levels=bac_orders))) + geom_point(aes(size = Abundance, fill=Phylum, color=Phylum), alpha = 0.5, shape = 21) + 
+  scale_size_continuous(limits = c(0.000001, 100), range = c(0.1,10), breaks = c(1,10,50,75)) + 
+  labs( x= "Population", y = "Prokaryotic Order", size = "Relative Abundance %", fill="Prokaryotic Phylum") + theme_bw() +  
+  scale_fill_manual(values = palette, breaks=c('Verrucomicrobiota', 'Proteobacteria', 'Firmicutes', 'Cyanobacteria', 'Bacteroidota', 'Bacteria IS', 'Other')) +
+  scale_color_manual(values = palette,breaks=c('Verrucomicrobiota', 'Proteobacteria', 'Firmicutes', 'Cyanobacteria', 'Bacteroidota', 'Bacteria IS', 'Other')) + theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust=1)) + 
+  ggtitle(label=my_title1, subtitle = "With median relative abundance above 1%") + geom_point(aes(size=Abundance+SD, fill = Phylum, color=Phylum), alpha = 0.20, shape=21) + geom_point(aes(size=Abundance-SD, fill = NULL, color=Phylum), alpha = 1, shape=21) + guides(color = FALSE, fill = guide_legend(override.aes = list(size = 3)))
+Fig1A
+
+
+sd2 <- psf_euk_coral_Tmin %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)*100} ) %>% 
+  psmelt() %>% group_by(OTU, population)  %>%
+  summarize(sd = sd(Abundance, na.rm=FALSE)) %>% arrange(OTU)
+
+bub <- merge_samples(psf_euk_coral_Tmin, "population") 
+type_taxa <- bub %>% 
+  tax_glom(taxrank = "Order") %>% 
+  transform_sample_counts(function(x) {x/sum(x)*100} )  
+
+type_taxa <- type_taxa %>% 
+  psmelt() %>% 
+  arrange(OTU) 
+
+
+library(data.table)
+# create dataframe from phyloseq object
+dat <- data.table(type_taxa)
+
+dat$SD <- sd2$sd
+# convert Phylum to a character vector from a factor because R
+dat$Order <- as.character(dat$Order)
+# group dataframe by Phylum, calculate median rel. abundance
+dat[, median := median(Abundance, na.rm = FALSE), 
+    by = "Order"]
+# Change name to remainder of Phylum less than 2%
+dat[(median <= 0.01), Order := "Below Threshold"]
+dat[(Order == "Below Threshold"), Division := "Other"]
+
+dat$Order[dat$Order == "Eukaryota_NA"] <- "Eukaryota IS"
+dat$Order[dat$Order == "Dinophyceae_NA"] <- "Dinophyceae IS"
+dat$Order[dat$Order == "Dinophyceae_X"] <- "Dinophyceae IS"
+dat$Order[dat$Order == "Apicomplexa_NA"] <- "Apicomplexa IS"
+dat$Order[dat$Order == "Apicomplexa_X"] <- "Apicomplexa IS"
+dat$Order[dat$Order == "Alveolata_NA"] <- "Alveolata IS"
+dat$Order[dat$Order == "Bacillariophyta_X"] <- "Bacillariophyta IS"
+dat$Order[dat$Order == "Syndiniales_X"] <- "Syndiniales IS"
+dat$Order[dat$Order == "Dinoflagellata_NA"] <- "Dinoflagellata IS"
+dat$Order[dat$Order == "Coccidiomorphea_X"] <- "Coccidiomorphea IS"
+dat$Division[dat$Division == "Eukaryota_NA"] <- "Eukaryota IS"
+
+my_title <- expression(paste("Eukaryotic Orders within ", italic("P. clavata")))
+
+Fig1B <- ggplot(dat[Abundance > 0], aes(x = factor(Sample, levels=ordered), y = factor(Order, levels=euk_orders))) + geom_point(aes(size = Abundance, fill=Division, color=Division), alpha = 0.5, shape = 21) + 
+  scale_size_continuous(limits = c(0.000001, 100), range = c(0.1,10), breaks = c(1,10,50,75)) + 
+  labs( x= "Population", y = "Eukaryotic Order", size = "Relative Abundance %", fill="Eukaryotic Division") + theme_bw() +  
+  scale_fill_manual(values = c25,breaks=c('Apicomplexa', 'Ciliophora', 'Dinoflagellata', 'Fungi', 'Haptophyta', 'Ochrophyta', 'Eukaryota IS', 'Other')) + 
+  scale_color_manual(values = c25,breaks=c('Apicomplexa', 'Ciliophora', 'Dinoflagellata', 'Fungi', 'Haptophyta', 'Ochrophyta', 'Eukaryota IS', 'Other')) +
+  theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust=1, face="bold")) + geom_point(aes(size=Abundance+SD, fill = Division, color=Division), alpha = 0.20, shape=21) + geom_point(aes(size=Abundance-SD, fill = NULL, color=Division), alpha = 1, shape=21) + guides(color = FALSE, fill = guide_legend(override.aes = list(size = 3)))
+Fig1B
+
+Fig1A_x <- Fig1A + theme(axis.title.x = element_blank(),axis.text.x = element_blank())
+
+p <- ggarrange(Fig1A_x, Fig1B, nrow=2, align="v", common.legend = FALSE, legend="right")
+p
+
+pdf("/Volumes/GoogleDrive/.shortcut-targets-by-id/1Uhk_e1I1cmFBqEeRdKf7D2rsPkFG5Gqk/Bonacolta\ et\ al.\ ISMEJ\ 2022/figures/microbiome_revision_figures/New_Fig1-Populations.pdf", width=7, height=8)
+plot(p)
+dev.off()
+```
